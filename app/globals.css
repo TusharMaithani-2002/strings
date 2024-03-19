@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.login-input {
+    @apply outline-none p-2 w-[400px] m-2 border-2 border-white border-b-gray-300 focus:border-2 focus:border-green-600;
+}
+
+
+.input-div {
+    @apply p-2;
+}
