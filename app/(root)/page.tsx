@@ -4,7 +4,7 @@ import RightInfoContainer from "../components/RightInfoContainer";
 
 const page = () => {
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <LeftIntoContainer />
       <RightInfoContainer />
     </div>
