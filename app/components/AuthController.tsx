@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import Button from "./ui/Button";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn,getProviders } from "next-auth/react";
 
 const AuthController = () => {
   const [email, setEmail] = useState("");
@@ -42,14 +43,14 @@ const AuthController = () => {
             />
             <Button className="text-gray-500" clickAction={toggleShow} type="button">show password</Button>
 
-          <Button className="bg-green-500 rounded-md p-2 text-white w-[250px] mt-5 mb-10">Sign In</Button>
+          <Button className="bg-green-500 rounded-md p-2 text-white w-[250px] mt-5 mb-10" clickAction={()=>signIn("email")}>Sign In</Button>
         </form>
 
         <div className="text-center text-gray-700 mb-2">Or with</div>
 
         <div className="flex flex-col items-center gap-2">
-          <Button className="bg-blue-500 rounded-md p-2 text-white flex justify-evenly w-[250px] h-[40px] items-center"> <Image src={"/google.png"} alt="google icon" width={15} height={15}/> SignIn with google </Button>
-          <Button className="bg-red-500 rounded-md p-2 text-white w-[250px] h-[40px] flex justify-evenly items-center"><Image src={"/github-logo.png"} alt="github icon" width={15} height={15}/>SingIn with github</Button>
+          <Button className="bg-blue-500 rounded-md p-2 text-white flex justify-evenly w-[250px] h-[40px] items-center" clickAction={()=>signIn("google",{callbackUrl:'/onboarding'})}> <Image src={"/google.png"} alt="google icon" width={15} height={15}/> SignIn with google </Button>
+          <Button className="bg-red-500 rounded-md p-2 text-white w-[250px] h-[40px] flex justify-evenly items-center" clickAction={()=>signIn("github",{callbackUrl:'/onboarding'})}><Image src={"/github-logo.png"} alt="github icon" width={15} height={15}/>SingIn with github</Button>
         </div>
       </div>
     </div>
