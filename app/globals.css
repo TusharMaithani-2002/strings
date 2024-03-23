@@ -11,3 +11,7 @@
 .input-div {
     @apply p-2;
 }
+
+.ql-container {
+    @apply rounded-lg text-blue-800 font-semibold text-lg
+}

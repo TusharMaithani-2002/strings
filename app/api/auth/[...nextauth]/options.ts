@@ -31,7 +31,6 @@ export const options = {
         },
 
         async signIn({profile}:any) {
-            console.log('we are in sign in')
             try {
                 await connectToDB();
 
@@ -44,7 +43,7 @@ export const options = {
                     const newUser = new User({
                         email:profile.email,
                         username:profile.name.replace(" ","").toLowerCase(),
-                        image:profile.picture
+                        image:profile.image
                     })
 
                     await newUser.save();
