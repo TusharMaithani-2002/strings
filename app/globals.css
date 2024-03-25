@@ -15,3 +15,8 @@
 .ql-container {
     @apply rounded-lg text-blue-800 font-semibold text-lg
 }
+
+.modal {
+    height: calc(100vh - 80px);
+    box-shadow: 0px 0px 10px 2px orangered;
+}
