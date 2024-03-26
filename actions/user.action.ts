@@ -2,6 +2,8 @@
 
 import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 // interfaces
@@ -56,3 +58,9 @@ export const updateUserProfile = async(profile:ProfileProps) => {
         throw new Error('Error while updating user! message: '+error.message);
     }
 }
+
+// export const currentUser = async () => {
+
+//     const session = await getServerSession();
+//     console.log(session);
+// }

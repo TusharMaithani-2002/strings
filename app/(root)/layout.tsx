@@ -1,11 +1,11 @@
-"use client";
+
 import React from 'react'
 import Header from '../components/Header'
+import { getServerSession } from 'next-auth';
+import { getSession, } from 'next-auth/react';
+import { currentUser } from '@/actions/user.action';
 
-const Layout = ({children}:{children:React.ReactNode}) => {
-
-    
-    console.log("rendering layout")
+const Layout = async ({children}:{children:React.ReactNode}) => {
   return (
     <div>
       <Header/>
