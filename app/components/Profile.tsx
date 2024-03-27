@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Button from "./ui/Button";
 import { signOut, useSession } from 'next-auth/react';
 import { getUser } from "@/actions/user.action";
+import Link from "next/link";
 
 const Profile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ const Profile = () => {
   },[session,session?.user]);
   
   return (
-    <div className="relative h-full">
+    <div className="relative">
       {!isOpen && <Image
         src={user?.profileImage || session?.user?.image as string}
         alt="profile-image"
@@ -41,6 +42,7 @@ const Profile = () => {
       "
         >
 
+          <Link href={'/profile'}>
           <Image
             src={user?.profileImage || session?.user?.image as string}
             alt="profile-image"
@@ -48,6 +50,7 @@ const Profile = () => {
             height={100}
             className="cursor-pointer rounded-md"
           />
+          </Link>
 
         <div className="flex flex-col gap-3">
           <div className="text-gray-500">{user?.name || session?.user?.name}</div>
@@ -55,7 +58,9 @@ const Profile = () => {
           <div className="text-sm text-gray-500">{user?.email || session?.user?.email}</div>
 
  
-            <Button className="bg-orange-600 rounded-lg p-2 text-lg text-white w-full"
+            <Button className="bg-orange-500 rounded-lg p-2 text-lg text-white w-full
+            hover:bg-orange-400
+            "
             clickAction={()=>signOut({
                 redirect:true,
                 callbackUrl:'/'
@@ -64,7 +69,9 @@ const Profile = () => {
               Sign out
             </Button>
             <Button
-              className="bg-white text-purpe-500 border border-orange-500 w-full p-2 text-lg rounded-lg"
+              className="bg-white text-orange-500 border border-orange-500 w-full p-2 text-lg rounded-lg
+              hover:bg-orange-300 hover:text-white
+              "
               clickAction={() => setIsOpen((prev) => !prev)}
             >
               cancel

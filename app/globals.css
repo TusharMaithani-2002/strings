@@ -17,6 +17,6 @@
 }
 
 .modal {
-    height: calc(100vh - 80px);
-    box-shadow: 0px 0px 10px 2px orangered;
+    /* height: calc(100vh - 80px); */
+    box-shadow: 0px 0px 10px 2px orange;
 }
