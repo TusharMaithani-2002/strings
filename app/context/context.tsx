@@ -1,11 +1,14 @@
 import { getUser } from "@/actions/user.action";
 import { useSession } from "next-auth/react";
-import { createContext,useState,useContext, ReactNode, useEffect } from "react";
+import { createContext,useState,useContext, ReactNode, useEffect, useReducer } from "react";
+import { userReducer } from "./reducer";
 
 const AppContext = createContext({});
 
+
 export const AppProvider = ({children}:{children:ReactNode}) => {
     const [user,setUser] = useState({});
+    const [openNavLabel,setOpenNavLabel] = useState(true);
     const {data:session} = useSession();
 
     useEffect(()=> {
@@ -22,7 +25,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
         fetchUser();
     },[session,session?.user,session?.user?.id])
 
-    return <AppContext.Provider value={{user,setUser}}>
+    return <AppContext.Provider value={{user,setUser,openNavLabel,setOpenNavLabel}}>
         {children}
     </AppContext.Provider>
 }

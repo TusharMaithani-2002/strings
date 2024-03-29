@@ -5,21 +5,13 @@ import Button from "./ui/Button";
 import { signOut, useSession } from 'next-auth/react';
 import { getUser } from "@/actions/user.action";
 import Link from "next/link";
+import { useAppContext } from "../context/context";
 
 const Profile = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user,setUser] = useState({});
+  const {user} = useAppContext();
   const {data:session} = useSession();
 
-  useEffect(() => {
-
-    const fetchUser = async() => {
-      setUser(await getUser(session?.user?.id))
-    }
-
-    fetchUser();
-  },[session,session?.user]);
-  
   return (
     <div className="relative">
       {!isOpen && <Image
@@ -38,7 +30,7 @@ const Profile = () => {
           className="modal absolute top-0 right-0 w-[250px] rounded-md
       flex flex-col gap-3 p-3 text-center
       transition-all items-center
-       justify-between bg-white
+       justify-between bg-white duration-300 ease-out
       "
         >
 
