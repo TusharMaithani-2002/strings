@@ -1,9 +1,10 @@
+import CreatePost from '@/app/components/Form/CreatePost'
 import React from 'react'
 
 const Page = () => {
   return (
     <div>
-      this is create page.
+      <CreatePost />
     </div>
   )
 }

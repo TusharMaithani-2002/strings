@@ -1,7 +1,7 @@
 "use server";
 import cloudinary from 'cloudinary';
 
-export const uploadImage = async(image:string) => {
+export const uploadImage = async(image:any) => {
     // function to upload image on cloudinary
     console.log('handling image')
 
@@ -16,6 +16,8 @@ export const uploadImage = async(image:string) => {
 
       return result.secure_url as string;
     } catch(error:any) {
-      throw new Error('Failed to upload image in cloudinary! message: '+error.message)
+      console.table(error)
+      throw new Error('Failed to upload image in cloudinary! message: '+error)
     }
   }
+
