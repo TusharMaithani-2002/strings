@@ -28,7 +28,7 @@ const NavBar = () => {
     const pathname = usePathname();
     const [openNavLabel,setOpenNavLabel] = useState(true);
    return (
-    <section className='md:h-[calc(100vh-80px)] border-r-2 border-orange-500 flex md:flex-col items-center
+    <section className='md:min-h-[calc(100vh-80px)] border-r-2 border-orange-500 flex md:flex-col items-center
     md:justify-between md:py-8 px-1 bg-red-600 relative h-[80px]
     '>
       <div className='flex md:flex-col'>
