@@ -2,7 +2,7 @@ import {Schema,model,models} from "mongoose";
 
 
 const postSchema = new Schema({
-    image: String,
+    images: [String],
     likesCount: {
         type:Number,
         default:0
@@ -27,6 +27,10 @@ const postSchema = new Schema({
             ref:'User'
         }
     ],
+    group:{
+        type:Schema.Types.ObjectId,
+        ref:'Group'
+    },
     tags:[{type:String}]
 });
 

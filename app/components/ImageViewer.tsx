@@ -24,34 +24,35 @@ const ImageViewer = ({ images }: any) => {
       {!images || !images.length ? (
         <div>No image selected</div>
       ) : (
-
         <div className="flex flex-col items-center w-full">
-        <div className="flex justify-center items-center gap-2 w-full">
-          <IoMdArrowBack
-            onClick={onBackClick}
-            className="bg-gray-400 h-[30px] w-[30px] hover:bg-gray-500 rounded-full"
-          />
+          <div className="flex justify-center items-center gap-2 w-full">
+            <IoMdArrowBack
+              onClick={onBackClick}
+              className="bg-gray-400 h-[30px] w-[30px] hover:bg-gray-500 rounded-full"
+            />
 
-          {images.length && (
-            <div className=" h-[250px] m-2 flex justify-center items-center w-full">
-              <Image
-                src={images[currImage]}
-                alt="selected image"
-                width={300}
-                height={300}
-                className="object-fill"
-              />
-            </div>
-          )}
+            {images.length && (
+              <div className="h-[250px] m-2 flex justify-center items-center w-full">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={images[currImage]}
+                    alt="selected image"
+                    layout="fill"
+                    objectFit="contain"
+                  />
+                </div>
+              </div>
+            )}
 
-          <IoMdArrowForward
-            onClick={onForwardClick}
-            className="bg-gray-400 h-[30px] w-[30px] hover:bg-gray-500 rounded-full"
-          />
+            <IoMdArrowForward
+              onClick={onForwardClick}
+              className="bg-gray-400 h-[30px] w-[30px] hover:bg-gray-500 rounded-full"
+            />
+          </div>
+          <div className="text-xs text-gray-400 text-center">
+            {currImage + 1}/{images.length}
+          </div>
         </div>
-            <div className="text-xs text-gray-400 text-center">{currImage+1}/{images.length}</div>
-        </div>
-
       )}
     </div>
   );
