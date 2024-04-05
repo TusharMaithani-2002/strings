@@ -7,7 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import ImageViewer from "../ImageViewer";
 import Select from "react-select";
 import { useAppContext } from "@/app/context/context";
-import { Schema } from "mongoose";
+import { useRouter } from "next/navigation";
 // value:user mongo id, label:username
 const userData = [
   "tushar",
@@ -26,30 +26,38 @@ const groupData = [
   "spidy verse",
 ];
 
-const users = userData.map((user) => ({ label: user, value: user }));
-const groups = groupData.map((group) => ({ label: group, value: group }));
+const users = userData.map((user) => ({ label: user, value:user }));
+const groups = groupData.map((group) => ({ label: group, value:group }));
 const CreatePost = () => {
   const [content, setContent] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [files, setFiles] = useState<any[]>([]);
-  const [mentions, setMentions] = useState<Schema.Types.ObjectId[]>([]);
+  const [mentions, setMentions] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [group, setGroup] = useState<Schema.Types.ObjectId | null>(null); // group id
-  const {user,setUser} = useAppContext();
+  const [group, setGroup] = useState<any | null>(null); // group id
+  const {user} = useAppContext();
+  const router = useRouter()
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const uploadedImages = await uploadImagestoCloudinary();
+    console.log(uploadedImages)
+    let mentionedUser:any[] = mentions?.map((mention) => mention.value);
     const data = {
       content,
-      images,
-      mentions,
+      images:uploadedImages,
+      mentions:mentionedUser,
       tags,
-      group,
-      author : user
+      group:group?.value,
+      author : user._id
     };
-  
+    
+    console.log(data)
+
     const postData = await addPost(data);
-    console.log("hello");
+    
+    if(postData.success) router.push('/home')
   };
   const convertFileToDataUrl = async (file: any) => {
     return new Promise((resolve, reject) => {
@@ -109,6 +117,7 @@ const CreatePost = () => {
     <form
       onSubmit={(e)=>handleSubmit(e)}
       className="flex flex-col items-center p-3 max-h-[100vh-80px] overflow-x-hidden overflow-y-scroll"
+      action=""
     >
       <div className="text-2xl text-red-500 m-2">Create Post</div>
       <div className="flex justify-center w-full m-3">
@@ -165,7 +174,7 @@ const CreatePost = () => {
 
       <div className="flex flex-col items-center justify-center p-5 ">
         <div className="flex flex-wrap w-[400px] gap-1">
-          {tags.map((tag, index) => (
+          {tags.length ? tags.map((tag, index) => (
             <span
               key={index}
               className="bg-orange-500 text-white p-2 rounded-lg"
@@ -175,7 +184,8 @@ const CreatePost = () => {
                 &times;
               </button>
             </span>
-          ))}
+          )):''
+          }
         </div>
         <input
           value={inputValue}
