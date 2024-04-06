@@ -38,7 +38,7 @@ const ImageViewer = ({ images }: any) => {
                     src={images[currImage]}
                     alt="selected image"
                     layout="fill"
-                    objectFit="contain"
+                    objectFit="fill"
                   />
                 </div>
               </div>

@@ -26,8 +26,8 @@ const groupData = [
   "spidy verse",
 ];
 
-const users = userData.map((user) => ({ label: user, value:user }));
-const groups = groupData.map((group) => ({ label: group, value:group }));
+const users = userData.map((user) => ({ label: user, value: user }));
+const groups = groupData.map((group) => ({ label: group, value: group }));
 const CreatePost = () => {
   const [content, setContent] = useState("");
   const [images, setImages] = useState<string[]>([]);
@@ -36,29 +36,26 @@ const CreatePost = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [group, setGroup] = useState<any | null>(null); // group id
-  const {user} = useAppContext();
-  const router = useRouter()
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
+  const { user } = useAppContext();
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const uploadedImages = await uploadImagestoCloudinary();
-    console.log(uploadedImages)
-    let mentionedUser:any[] = mentions?.map((mention) => mention.value);
+    console.log(uploadedImages);
+    let mentionedUser: any[] = mentions?.map((mention) => mention.value);
     const data = {
       content,
-      images:uploadedImages,
-      mentions:mentionedUser,
+      images: uploadedImages,
+      mentions: mentionedUser,
       tags,
-      group:group?.value,
-      author : user._id
+      group: group?.value,
+      author: user._id,
     };
-    
-    console.log(data)
-
     const postData = await addPost(data);
-    
-    if(postData.success) router.push('/home')
+    if (postData.success) router.push("/home");
+    return postData;
   };
+
   const convertFileToDataUrl = async (file: any) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -86,7 +83,7 @@ const CreatePost = () => {
           return dataUrl;
         })
       );
-      const uploadedImageUrls: any[] = [];
+      const uploadedImageUrls: string[] = [];
       convertedFiles.map(async (image) => {
         const uploadedUrl = await uploadImage(image);
         uploadedImageUrls.push(uploadedUrl);
@@ -109,13 +106,17 @@ const CreatePost = () => {
       setInputValue("");
     }
   };
+  const handleAddTag = () => {
+    if (inputValue.trim()) setTags([...tags, inputValue.trim()]);
+    setInputValue("");
+  };
   const handleTagRemove = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
     <form
-      onSubmit={(e)=>handleSubmit(e)}
+      onSubmit={(e) => handleSubmit(e)}
       className="flex flex-col items-center p-3 max-h-[100vh-80px] overflow-x-hidden overflow-y-scroll"
       action=""
     >
@@ -174,28 +175,36 @@ const CreatePost = () => {
 
       <div className="flex flex-col items-center justify-center p-5 ">
         <div className="flex flex-wrap w-[400px] gap-1">
-          {tags.length ? tags.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-orange-500 text-white p-2 rounded-lg"
-            >
-              <span className="m-1 font-semibold">{tag}</span>
-              <button type="button" onClick={() => handleTagRemove(tag)}>
-                &times;
-              </button>
-            </span>
-          )):''
-          }
+          {tags.length
+            ? tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-orange-500 text-white p-2 rounded-lg"
+                >
+                  <span className="m-1 font-semibold">{tag}</span>
+                  <button type="button" onClick={() => handleTagRemove(tag)}>
+                    &times;
+                  </button>
+                </span>
+              ))
+            : ""}
         </div>
-        <input
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeyDown}
-          placeholder="Add tags..."
-          className="outline-none rounded-md text-red-600 m-1 p-2 text-sm font-bold focus:border-b-2 focus:border-orange-400
-        bg-gray-200
-        "
-        />
+        <div className="flex w-[300px] justify-around">
+          <input
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeyDown}
+            placeholder="Add tags..."
+            className="outline-none rounded-md text-red-600 m-1 p-2 text-sm font-bold focus:border-b-2 focus:border-orange-400 bg-gray-200 h-full"
+          />
+          <button
+            type="button"
+            onClick={handleAddTag}
+            className="bg-red-500 text-white px-4 m-1 rounded-md shadow-md hover:bg-red-600 transition duration-300 "
+          >
+            Add
+          </button>
+        </div>
       </div>
 
       <button
