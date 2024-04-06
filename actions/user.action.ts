@@ -59,6 +59,17 @@ export const updateUserProfile = async(profile:ProfileProps) => {
     }
 }
 
+export const getUserName = async (id : string) => {
+    try {
+        await connectToDB();
+        const user = await getUser(id)
+        if(!user)throw new Error ('User not found!')
+        return user.username
+    } catch (error:any) {
+        throw new Error ('Error while getting user name! message: '+error.message)
+    }
+}
+
 // export const currentUser = async () => {
 
 //     const session = await getServerSession();

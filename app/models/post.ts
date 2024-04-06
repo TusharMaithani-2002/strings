@@ -2,7 +2,7 @@ import {Schema,model,models} from "mongoose";
 
 
 const postSchema = new Schema({
-    images: [String],
+    images: [{type:String}],
     likesCount: {
         type:Number,
         default:0
