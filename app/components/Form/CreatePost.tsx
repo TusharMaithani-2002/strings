@@ -40,12 +40,12 @@ const CreatePost = () => {
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const uploadedImages = await uploadImagestoCloudinary();
-    console.log(uploadedImages);
+    // const uploadedImages = await uploadImagestoCloudinary();
+    // console.log(uploadedImages);
     let mentionedUser: any[] = mentions?.map((mention) => mention.value);
     const data = {
       content,
-      images: uploadedImages,
+      images: images,
       mentions: mentionedUser,
       tags,
       group: group?.value,
@@ -68,12 +68,22 @@ const CreatePost = () => {
 
   const hanldeFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files);
-    setFiles(files);
 
-    files.forEach((image) => {
-      setImages((prev) => [...prev, URL.createObjectURL(image)]);
+    files.forEach(async(image) => {
+      // setImages((prev) => [...prev, URL.createObjectURL(image)]);
+      await handleImage(image);
+      
     });
   };
+
+  const handleImage = async(image) => {
+    const reader = new FileReader();
+    reader.onloadend = async() => {
+      const newImage = await uploadImage(reader.result)
+      setImages(prev => [...prev,newImage]);
+    }
+    reader.readAsDataURL(image)
+  }
 
   const uploadImagestoCloudinary = async () => {
     try {
