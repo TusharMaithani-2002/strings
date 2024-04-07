@@ -1,5 +1,6 @@
 "use server"
 
+import { PostType } from "@/app/components/GeneralPosts";
 import Post from "@/app/models/post";
 import { connectToDB } from "@/app/utils/database";
 import { Schema } from "mongoose";
@@ -16,7 +17,6 @@ interface PostProps {
 }
 export const addPost = async (post:PostProps) => {
     try {
-        console.log(post)
         await connectToDB();
         const newPost = await Post.create(post);
         revalidatePath('/create')
