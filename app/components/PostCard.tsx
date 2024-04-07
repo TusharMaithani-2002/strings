@@ -30,7 +30,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ postData }) => {
-  console.log(postData);
+
   const router = useRouter();
   const [like, setLike] = useState(false);
 
@@ -38,7 +38,6 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
     setLike((prevLike) => !prevLike);
   };
 
-  console.log(postData);
 
   return (
     <div
@@ -89,7 +88,7 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
 
             <p
               className="text-gray-700 text-left"
-              dangerouslySetInnerHTML={{ __html: postData.content }}
+              dangerouslySetInnerHTML={{ __html:postData.content.length > 305 ? postData.content.substring(0,305)+"..." :postData.content}}
             ></p>
             <div className="p-3 text-black text-sm flex flex-row items-center justify-between w-full">
               <div className="flex items-center">

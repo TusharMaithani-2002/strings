@@ -38,10 +38,14 @@ const CreatePost = () => {
   const [group, setGroup] = useState<any | null>(null); // group id
   const { user } = useAppContext();
   const router = useRouter();
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const uploadedImages = await uploadImagestoCloudinary();
     // console.log(uploadedImages);
+
+    if(images?.length === 0 && content?.length === 0) return;
     let mentionedUser: any[] = mentions?.map((mention) => mention.value);
     const data = {
       content,
@@ -127,17 +131,19 @@ const CreatePost = () => {
   return (
     <form
       onSubmit={(e) => handleSubmit(e)}
-      className="flex flex-col items-center p-3 max-h-[100vh-80px] overflow-x-hidden overflow-y-scroll"
+      className="flex flex-col items-center p-3 max-h-[calc(100vh-160px)] overflow-x-hidden 
+      z-0 md:max-h-[calc(100vh-80px)] overflow-y-auto
+      "
       action=""
     >
-      <div className="text-2xl text-red-500 m-2">Create Post</div>
+      <div className="text-2xl text-green-500 m-2 font-bold">Create Post</div>
       <div className="flex justify-center w-full m-3">
         {images && <ImageViewer images={images} />}
       </div>
       <div>
         <label
           htmlFor="input-file"
-          className="bg-red-500 text-white rounded-md p-2 "
+          className="bg-green-500 text-white rounded-md p-2 "
         >
           upload image
         </label>
@@ -151,7 +157,7 @@ const CreatePost = () => {
         />
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between w-2/3 mt-5">
+      <div className="flex flex-col md:flex-row justify-between w-full md:w-2/3 mt-5 items-center">
         <div>
           <Select
             options={users}
@@ -175,16 +181,20 @@ const CreatePost = () => {
           />
         </div>
       </div>
+
+      <div className="flex justify-center items-center">
+
       <ReactQuill
         theme="snow"
         value={content}
         onChange={setContent}
-        className="w-2/3 m-2 mb-5 text-lg text-black"
+        className="w-[100%] md:w-2/3 m-4 mb-5 md:overflow-y-auto"
         placeholder="enter your thoughts"
       />
+      </div>
 
       <div className="flex flex-col items-center justify-center p-5 ">
-        <div className="flex flex-wrap w-[400px] gap-1">
+        <div className="flex flex-wrap w-full md:w-[400px] gap-1 p-2">
           {tags.length
             ? tags.map((tag, index) => (
                 <span
@@ -210,7 +220,7 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={handleAddTag}
-            className="bg-red-500 text-white px-4 m-1 rounded-md shadow-md hover:bg-red-600 transition duration-300 "
+            className="bg-green-500 text-white px-4 m-1 rounded-md shadow-md hover:bg-green-700 transition duration-300 "
           >
             Add
           </button>
@@ -219,8 +229,8 @@ const CreatePost = () => {
 
       <button
         type="submit"
-        className="bg-red-500 text-white p-2 px-4 rounded-md mt-3
-        hover:bg-red-600
+        className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
+        hover:bg-green-700
         "
       >
         submit

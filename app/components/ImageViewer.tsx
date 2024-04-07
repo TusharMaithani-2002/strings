@@ -20,7 +20,7 @@ const ImageViewer = ({ images }: any) => {
     setCurrImage((prev) => prev - 1);
   };
   return (
-    <div className="flex md:justify-center items-center w-2/3 border-2 border-dashed border-red-500 rounded-md p-1">
+    <div className="flex md:justify-center items-center w-2/3 border-2 border-dashed border-green-500 rounded-md p-1">
       {!images || !images.length ? (
         <div>No image selected</div>
       ) : (
