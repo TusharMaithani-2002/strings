@@ -31,7 +31,7 @@ const Page = () => {
       )}
       <div className="flex flex-wrap">
         {posts?.map((post, index) => (
-          <div key={post._id} className="w-1/2 mb-4 mt-4 px-4">
+          <div key={post._id} className="w-full mb-4 mt-4">
             <PostCard postData={{ ...post, _id: post._id }} />
           </div>
         ))}

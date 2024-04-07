@@ -4,6 +4,7 @@ import Post from "@/app/models/post";
 import { connectToDB } from "@/app/utils/database";
 import { Schema } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { BsXLg } from "react-icons/bs";
 
 interface PostProps {
     content: string;
@@ -30,7 +31,8 @@ export const addPost = async (post:PostProps) => {
 export const getAllPost = async () => {
     try {
         await connectToDB();
-        const posts = await Post.find();
+        const posts = await Post.find().populate("author").lean();
+        console.log(posts)
         return posts;
     } catch(error:any) {
         throw new Error("Error while fetching posts! message: "+error.message)
