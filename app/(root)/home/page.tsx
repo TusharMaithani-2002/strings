@@ -1,41 +1,13 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useAppContext } from "@/app/context/context";
-import { useRouter } from "next/navigation";
-import PostCard from "@/app/components/PostCard";
-import { getAllPost } from "@/actions/post.action";
-const Page = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [posts, setPosts] = useState<any[]>([]);
-  if (status === "unauthenticated") router.push("/");
-  console.log(session);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const posts = await getAllPost();
-      setPosts(posts);
-    };
-    fetchPosts();
-  }, []);
-  const { user } = useAppContext();
+
+import GeneralPosts from "@/app/components/GeneralPosts";
+const Page = () => {
   return (
-    <div className="overflow-auto max-h-[calc(100vh-160px)] md:max-h-[calc(100vh-80px)]">
-      home
-      {session && (
-        <div>
-          <p>we are logged in.. do you want to log out?</p>
-          <p>User : {user?.username}</p>
-        </div>
-      )}
-      <div className="flex flex-wrap">
-        {posts?.map((post, index) => (
-          <div key={post._id} className="w-full mb-4 mt-4">
-            <PostCard postData={{ ...post, _id: post._id }} />
-          </div>
-        ))}
-      </div>
+    <div className="overflow-auto max-h-[calc(100vh-160px)] md:max-h-[calc(100vh-80px)]
+    flex h-full
+    ">
+        <GeneralPosts />
+      <div className="sm:hidden md:block md:border-l md:border-gray-400 md:w-1/3"></div>
     </div>
   );
 };
