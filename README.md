@@ -1,4 +1,4 @@
-Strings is a social media platform where you can add
-- posts
-- strings to post
-- make groups
+# tasks to be performed
+- creating post page
+- adding like functionality
+- adding comments
