@@ -33,7 +33,7 @@ const PostImageViewer = ({ images }: any) => {
             alt={"post image"}
             width={400}
             height={400}
-            className="object-fill w-[500px] h-[300px] m-0 md:mx-2 "
+            className="object-contain w-[500px] h-[300px] m-0 md:mx-2"
           />
        
           

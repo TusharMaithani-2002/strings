@@ -32,15 +32,16 @@ const ImageViewer = ({ images }: any) => {
             />
 
             {images.length && (
-              <div className="h-[250px] m-2 flex justify-center items-center w-full">
-                <div className="relative w-full h-full">
+              <div className="m-2 flex justify-center items-center w-full">
+                
                   <Image
                     src={images[currImage]}
-                    alt="selected image"
-                    layout="fill"
-                    objectFit="fill"
+                    alt={"post image"}
+            width={400}
+            height={400}
+            className="object-contain w-[500px] h-[300px] m-0 md:mx-2"
                   />
-                </div>
+              
               </div>
             )}
 

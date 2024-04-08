@@ -6,9 +6,9 @@ import PostCard from './PostCard';
 const GeneralPosts = async() => {
     const posts:any[] = await getAllPost();
   return (
-    <div className="flex flex-1 flex-col sm:pb-5 p-2">
+    <div className="flex flex-1 flex-col sm:pb-5">
              {posts?.map((post, index) => (
-          <div key={index} className="w-full my-2">
+          <div key={index} className="w-full">
             <PostCard postData={{ ...post, _id: post._id as string }} />
           </div>
         ))}

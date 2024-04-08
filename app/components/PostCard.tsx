@@ -41,8 +41,9 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
 
   return (
     <div
-      className="border-2 bg-white shadow-md rounded-xl overflow-hidden flex
+      className="border-b-2 border-r-2 bg-white overflow-hidden flex cursor-pointer
     "
+    onClick={() => router.push(`/post/${postData._id}`)}
     >
       <div className="hidden md:flex md:flex-col md:p-2 md:items-center">
         <Image

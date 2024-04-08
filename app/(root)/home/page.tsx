@@ -7,7 +7,7 @@ const Page = () => {
     flex h-full
     ">
         <GeneralPosts />
-      <div className="sm:hidden md:block md:border-l md:border-gray-400 md:w-1/3"></div>
+      <div className="sm:hidden md:block md:w-1/3"></div>
     </div>
   );
 };
