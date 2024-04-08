@@ -4,6 +4,7 @@ import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
 
 const PostImageViewer = ({ images }: any) => {
   const [currImage, setCurrImage] = useState(0);
+  const numOfImages = images.length;
   const onForwardClick = () => {
     setCurrImage((prev) => (prev + 1) % images.length);
   };
@@ -20,10 +21,10 @@ const PostImageViewer = ({ images }: any) => {
   return (
     <div className="flex flex-col items-center justify-center relative">
       <div className="flex items-center">
-        <IoMdArrowBack
+        {numOfImages>1 && <IoMdArrowBack
           onClick={onBackClick}
           className="bg-green-400 h-[30px] w-[30px] hover:bg-green-500 fill-white rounded-full hidden md:block"
-        />
+        />}
         <div>
 
             
@@ -39,16 +40,16 @@ const PostImageViewer = ({ images }: any) => {
           
           
         </div>
-        <IoMdArrowForward
+        {numOfImages>1&&<IoMdArrowForward
           onClick={onForwardClick}
           className="bg-green-400 h-[30px] w-[30px] hover:bg-green-500 fill-white rounded-full
           hidden md:block
           "
-        />
+        />}
       </div>
-      <div>
+      {numOfImages>1&&<div>
       <span className="text-gray-500">{currImage + 1}</span>/<span className="text-green-600">{images.length}</span>
-      </div>
+      </div>}
     </div>
   );
 };

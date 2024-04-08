@@ -8,6 +8,8 @@ import ImageViewer from "../ImageViewer";
 import Select from "react-select";
 import { useAppContext } from "@/app/context/context";
 import { useRouter } from "next/navigation";
+import Button from "../ui/Button";
+import LoadingSpinner from "../LoadingSpinner";
 // value:user mongo id, label:username
 const userData = [
   "tushar",
@@ -31,19 +33,18 @@ const groups = groupData.map((group) => ({ label: group, value: group }));
 const CreatePost = () => {
   const [content, setContent] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  const [files, setFiles] = useState<any[]>([]);
   const [mentions, setMentions] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [group, setGroup] = useState<any | null>(null); // group id
+  const [loading,setLoading] = useState(false);
   const { user } = useAppContext();
   const router = useRouter();
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const uploadedImages = await uploadImagestoCloudinary();
-    // console.log(uploadedImages);
+
 
     if(images?.length === 0 && content?.length === 0) return;
     let mentionedUser: any[] = mentions?.map((mention) => mention.value);
@@ -73,18 +74,23 @@ const CreatePost = () => {
   const hanldeFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files);
 
-    files.forEach(async(image) => {
+    files.forEach(async(image,i) => {
       // setImages((prev) => [...prev, URL.createObjectURL(image)]);
+      
       await handleImage(image);
       
+      
     });
+   
   };
 
   const handleImage = async(image) => {
     const reader = new FileReader();
     reader.onloadend = async() => {
+      setLoading(true);
       const newImage = await uploadImage(reader.result)
       setImages(prev => [...prev,newImage]);
+      setLoading(false);
     }
     reader.readAsDataURL(image)
   }
@@ -143,9 +149,9 @@ const CreatePost = () => {
       <div>
         <label
           htmlFor="input-file"
-          className="bg-green-500 text-white rounded-md p-2 "
+          className="  "
         >
-          upload image
+          <span className="flex bg-green-500 text-white rounded-md p-2">{loading && <LoadingSpinner />}upload image</span>
         </label>
         <input
           type="file"
@@ -227,14 +233,21 @@ const CreatePost = () => {
         </div>
       </div>
 
-      <button
+      {/* <button
         type="submit"
         className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
         hover:bg-green-700
         "
       >
         submit
-      </button>
+      </button> */}
+
+      <Button type="button"
+        className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
+        hover:bg-green-700
+        ">
+          submit
+      </Button>
     </form>
   );
 };
