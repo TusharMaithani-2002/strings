@@ -1,43 +1,44 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { BsFillHeartFill, BsHeart } from "react-icons/bs";
 import { BsSave } from "react-icons/bs";
 import { FaRegShareFromSquare } from "react-icons/fa6";
 import { FaRegCommentDots } from "react-icons/fa";
 import PostImageViewer from "../(root)/create/components/PostImageViewer";
 import { formatDateString } from "../utils/date";
-
-interface PostData {
-  _id: string;
-  content: string;
-  images: string[];
-  mentions: any[] | undefined;
-  replies: any[] | undefined;
-  tags: string[];
-  group: any;
-  author: {
-    username: string;
-    profileImage: string;
-  };
-  likesCount: number;
-  createdAt: Date;
-}
+import { PostData } from "../types/postTypes";
+import Link from "next/link";
+import LikeButton from "./LikeButton";
 
 interface PostCardProps {
-  postData: PostData;
+  id: string;
+  likedIds: string[];
+  likesCount: number;
+  author: {
+    profileImage: string;
+    _id: string;
+    username: string;
+  };
+  tags: string[];
+  group: string;
+  repliesCount: number;
+  images: string[];
+  createdAt: Date;
+  content: string;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ postData }) => {
-
-  const router = useRouter();
-  const [like, setLike] = useState(false);
-
-  const handleLikeToggle = () => {
-    setLike((prevLike) => !prevLike);
-  };
-
+const PostCard = ({
+  id,
+  likedIds,
+  likesCount,
+  author,
+  tags,
+  group,
+  repliesCount,
+  images,
+  createdAt,
+  content,
+}: PostCardProps) => {
+  let liked = likedIds?.indexOf(author._id);
 
   return (
     <div
@@ -46,7 +47,7 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
     >
       <div className="hidden md:flex md:flex-col md:p-2 md:items-center">
         <Image
-          src={postData.author.profileImage}
+          src={author.profileImage}
           width={50}
           height={50}
           className="rounded-full bg-blue-400"
@@ -59,7 +60,7 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
         <div className="w-full flex items-center justify-between px-3 pb-3">
           <div className="md:hidden ">
             <Image
-              src={postData.author.profileImage}
+              src={author.profileImage}
               width={50}
               height={50}
               className="rounded-full bg-blue-400"
@@ -68,10 +69,10 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
           </div>
           <div className="flex flex-col md:flex-row md:justify-between w-full items-center">
             <div className="flex items-center text-gray-400">
-              <span className="ml-2">{postData.author.username}</span>
+              <span className="ml-2">{author.username}</span>
             </div>
             <div className="text-sm text-gray-400">
-              {formatDateString(postData.createdAt.toDateString())}
+              {formatDateString(createdAt.toDateString())}
             </div>
           </div>
         </div>
@@ -79,8 +80,8 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
         <div className="flex flex-row h-full">
           <div className="w-full flex flex-col justify-between items-center">
             <div className="overflow-hidden">
-              {postData?.images.length ? (
-                <PostImageViewer images={postData.images as string[]} />
+              {images.length ? (
+                <PostImageViewer images={images as string[]} />
               ) : (
                 <span></span>
               )}
@@ -88,33 +89,27 @@ const PostCard: React.FC<PostCardProps> = ({ postData }) => {
 
             <p
               className="text-gray-700 text-left"
-              dangerouslySetInnerHTML={{ __html:postData.content.length > 305 ? postData.content.substring(0,305)+"..." :postData.content}}
+              dangerouslySetInnerHTML={{
+                __html:
+                  content.length > 305
+                    ? content.substring(0, 305) + "..."
+                    : content,
+              }}
             ></p>
             <div className="p-3 text-black text-sm flex flex-row items-center justify-between w-full">
-              <div className="flex items-center">
-                <button onClick={handleLikeToggle}>
-                  {like ? (
-                    <BsFillHeartFill
-                      style={{ color: "red", height: "25px", width: "25px" }}
-                    />
-                  ) : (
-                    <BsHeart
-                      style={{ height: "25px", width: "25px" }}
-                      className="fill-green-600"
-                    />
-                  )}
-                </button>
-                <span className="ml-2">{postData.likesCount}</span>
-              </div>
-              <div
-                className=" block cursor-pointer  justify-center items-center"
-                onClick={() => router.push(`/post/${postData._id}`)}
+              <LikeButton liked={liked} likesCount={likesCount} postId={id} />
+              <Link
+                href={`/post/${id}`}
+                className=" flex cursor-pointer justify-center items-center gap-2"
               >
                 <FaRegCommentDots
                   style={{ height: "25px", width: "25px" }}
                   className="fill-green-600 cursor-pointer"
                 />
-              </div>
+                <span>
+                {repliesCount}
+                </span>
+              </Link>
 
               <div>
                 <FaRegShareFromSquare

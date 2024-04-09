@@ -25,7 +25,7 @@ const Button = ({ children, clickAction, className,type }: Props) => {
       setLoading(false);
     }} type={type}>
 
-      <span className="flex">{loading && <LoadingSpinner />} {children}</span>
+      <span className="flex items-center justify-around w-full">{loading ? <LoadingSpinner />:""} {children}</span>
      
     </button>
   );

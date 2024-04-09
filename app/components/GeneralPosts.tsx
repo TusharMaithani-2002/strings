@@ -1,15 +1,27 @@
 
 import { getAllPost } from '@/actions/post.action'
-import React from 'react'
 import PostCard from './PostCard';
 
 const GeneralPosts = async() => {
-    const posts:any[] = await getAllPost();
+
+  const posts = await getAllPost();
+
   return (
     <div className="flex flex-1 flex-col sm:pb-5">
              {posts?.map((post, index) => (
           <div key={index} className="w-full">
-            <PostCard postData={{ ...post, _id: post._id as string }} />
+            <PostCard
+            id={post._id}
+            likedIds={post.likedIds}
+            likesCount={post.likesCount}
+            author={post.author}
+            tags={post.tags}
+            group={post.group}
+            repliesCount={post.repliesCount}
+            images={post.images}
+            createdAt={post.createdAt}
+            content={post.content}
+            />
           </div>
         ))}
     </div>

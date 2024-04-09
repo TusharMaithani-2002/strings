@@ -1,11 +1,10 @@
 "use server"
 
-import { PostType } from "@/app/components/GeneralPosts";
 import Post from "@/app/models/post";
+import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
-import { Schema } from "mongoose";
 import { revalidatePath } from "next/cache";
-import { BsXLg } from "react-icons/bs";
+
 
 interface PostProps {
     content: string;
@@ -19,7 +18,7 @@ export const addPost = async (post:PostProps) => {
     try {
         await connectToDB();
         const newPost = await Post.create(post);
-        revalidatePath('/create')
+        revalidatePath("/create")
         return {
             success:true,
         };
@@ -31,10 +30,50 @@ export const addPost = async (post:PostProps) => {
 export const getAllPost = async () => {
     try {
         await connectToDB();
-        const posts = await Post.find().populate("author").lean();
-        console.log(posts)
+        const posts = await Post.find({},{
+            "images":1,
+            "author":1,
+            "likesCount":1,
+            "repliesCount":1,
+            "tags":1,
+            "content":1,
+            "group":1,
+            "likedIds":1,
+            "createdAt":1
+        }).populate({path:'author',select:'_id username profileImage'}).sort({createdAt:"desc"});
         return posts;
     } catch(error:any) {
         throw new Error("Error while fetching posts! message: "+error.message)
+    }
+}
+
+
+export const updatePostLikes = async(postId:string,userId:string,liked:number,path:string="") => {
+    try {
+
+        const post = await Post.findById(postId);
+        const user = await User.findById(userId);
+
+        if(!post) throw new Error('post not found!');
+
+        if(liked !== -1) {
+            // post liked, removing post
+            post?.likedIds.splice(liked,1);
+            post.likedCount = post.likesCount - 1;
+            const filteredLikedPosts = user?.likedPosts.filter((post:string) => post !== postId)
+            user.likedPost = filteredLikedPosts;
+            
+
+        } else {
+            post?.likedIds.push(userId);
+            post.likesCount = post.likesCount + 1;
+            user?.likedPosts.push(postId);
+        }
+
+        await post.save();
+        await user.save();
+        revalidatePath(path)
+    } catch(error:any) {
+        throw new Error('Error while updating likes! message: '+error.message);
     }
 }

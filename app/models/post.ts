@@ -1,38 +1,49 @@
+import { Schema, model, models } from "mongoose";
 
-import {Schema,model,models} from "mongoose";
-
-const postSchema = new Schema({
+const postSchema = new Schema(
+  {
     images: [{ type: String }],
     likesCount: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     repliesCount: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
-    replies: [{
+    replies: [
+      {
         type: Schema.Types.ObjectId,
-        ref: 'String'
-    }],
+        ref: "String",
+      },
+    ],
     author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     content: String,
-    mentions: [{
+    mentions: [
+      {
         type: Schema.Types.ObjectId,
-        ref: 'User'
-    }],
+        ref: "User",
+      },
+    ],
     group: {
-        type: Schema.Types.ObjectId,
-        ref: 'Group'
+      type: Schema.Types.ObjectId,
+      ref: "Group",
     },
     tags: [{ type: String }],
-},{timestamps:true});
+    likedIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-
-const Post = models.Post || model("Post",postSchema);
+const Post = models.Post || model("Post", postSchema);
 
 export default Post;

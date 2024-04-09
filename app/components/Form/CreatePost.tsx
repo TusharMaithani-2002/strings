@@ -42,10 +42,9 @@ const CreatePost = () => {
   const router = useRouter();
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
 
-
+    if(!user) return;
     if(images?.length === 0 && content?.length === 0) return;
     let mentionedUser: any[] = mentions?.map((mention) => mention.value);
     const data = {
@@ -136,7 +135,6 @@ const CreatePost = () => {
 
   return (
     <form
-      onSubmit={(e) => handleSubmit(e)}
       className="flex flex-col items-center p-3 max-h-[calc(100vh-160px)] overflow-x-hidden 
       z-0 md:max-h-[calc(100vh-80px)] overflow-y-auto
       "
@@ -245,7 +243,9 @@ const CreatePost = () => {
       <Button type="button"
         className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
         hover:bg-green-700
-        ">
+        "
+        clickAction={()=>handleSubmit()}
+        >
           submit
       </Button>
     </form>
