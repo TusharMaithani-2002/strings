@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, SchemaTypes, model, models } from "mongoose";
 
 const postSchema = new Schema(
   {
@@ -40,6 +40,10 @@ const postSchema = new Schema(
         ref: "User",
       },
     ],
+    parent:{
+      type:Schema.Types.ObjectId,
+      ref:"Post",
+    }
   },
   { timestamps: true }
 );

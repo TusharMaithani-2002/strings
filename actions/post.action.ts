@@ -13,6 +13,7 @@ interface PostProps {
     tags?: string[];
     group?: string;
     author: string;
+    parent?:string;
 }
 export const addPost = async (post:PostProps) => {
     try {
@@ -30,7 +31,7 @@ export const addPost = async (post:PostProps) => {
 export const getAllPost = async () => {
     try {
         await connectToDB();
-        const posts = await Post.find({},{
+        const posts = await Post.find({parent:null},{
             "images":1,
             "author":1,
             "likesCount":1,
@@ -77,3 +78,18 @@ export const updatePostLikes = async(postId:string,userId:string,liked:number,pa
         throw new Error('Error while updating likes! message: '+error.message);
     }
 }
+
+export const getPost = async (postId:string) => {
+
+    try {
+
+        if(!postId) return null;
+        await connectToDB();
+
+        const post = await Post.findById(postId).populate({path:'author',select:'_id username profileImage'})
+        return post;
+    } catch(error:any) {
+        throw new Error('error while fetching post! message: '+error.message);
+    }
+}
+

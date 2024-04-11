@@ -15,7 +15,6 @@ interface Props {
 const Button = ({ children, clickAction, className,type }: Props) => {
 
   const [loading,setLoading] = useState(false);
-  console.log(typeof clickAction)
   return (
     <button className={className} onClick={async(event)=>{
       setLoading(true);

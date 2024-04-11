@@ -18,8 +18,8 @@ interface PostCardProps {
     _id: string;
     username: string;
   };
-  tags: string[];
-  group: string;
+  tags?: string[];
+  group?: string;
   repliesCount: number;
   images: string[];
   createdAt: Date;
