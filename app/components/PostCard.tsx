@@ -21,7 +21,7 @@ interface PostCardProps {
   tags?: string[];
   group?: string;
   repliesCount: number;
-  images: string[];
+  images?: string[];
   createdAt: Date;
   content: string;
 }
@@ -80,7 +80,7 @@ const PostCard = ({
         <div className="flex flex-row h-full">
           <div className="w-full flex flex-col justify-between items-center">
             <div className="overflow-hidden">
-              {images.length ? (
+              {images?.length ? (
                 <PostImageViewer images={images as string[]} />
               ) : (
                 <span></span>

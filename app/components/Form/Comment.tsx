@@ -6,23 +6,26 @@ import { IoMdSend } from "react-icons/io";
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.bubble.css";
 import { addPost } from '@/actions/post.action';
+import { useAppContext } from '@/app/context/context';
 
 interface Props {
   parentId:string;
-  userId:string;
 }
 
-const Comment = ({parentId,userId}:Props) => {
+const Comment = ({parentId}:Props) => {
     const pathname = usePathname();
     const [content,setContent] = useState('');
+    const {user} = useAppContext();
 
     const handleComment = async() => {
 
       const comment = await addPost({
         content,
-        author:userId,
+        author:user._id,
         parent:parentId
-      })
+      },`/post/${parentId}`)
+ 
+      if(comment) setContent('');
     }
   return (
     <form className='bg-green-300 p-2 w-full flex items-center justify-around gap-2'>

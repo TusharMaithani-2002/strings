@@ -15,11 +15,18 @@ interface PostProps {
     author: string;
     parent?:string;
 }
-export const addPost = async (post:PostProps) => {
+export const addPost = async (post:PostProps,path?:string) => {
     try {
         await connectToDB();
         const newPost = await Post.create(post);
-        revalidatePath("/create")
+
+        if(post.parent) {
+            const parentPost = await Post.findById(post.parent);
+            parentPost.repliesCount = parentPost.repliesCount + 1;
+            await parentPost.save();
+        }
+        revalidatePath(path as string);
+        return newPost;
         return {
             success:true,
         };
@@ -93,3 +100,18 @@ export const getPost = async (postId:string) => {
     }
 }
 
+export const getPostComments = async (postId:string) => {
+    try {
+
+    if(!postId) return [];
+    await connectToDB();
+
+    const comments = await Post.find({parent:postId}).populate({path:'author',select:'_id username profileImage'});
+    return comments;
+
+    } catch(error:any) {
+        throw new Error('Error while fetching comments! message: '+error.message);
+    }
+}
+
+// export const addComment = async (post:PostProps,parentId:string) => {}

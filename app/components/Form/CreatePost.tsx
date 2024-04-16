@@ -55,7 +55,7 @@ const CreatePost = () => {
       group: group?.value,
       author: user._id,
     };
-    const postData = await addPost(data);
+    const postData = await addPost(data,'/create');
     if (postData.success) router.push("/home");
     return postData;
   };

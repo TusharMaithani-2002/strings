@@ -1,4 +1,5 @@
 import { getPost } from '@/actions/post.action';
+import CommentSection from '@/app/components/CommentSection';
 import Comment from '@/app/components/Form/Comment';
 import PostCard from '@/app/components/PostCard';
 import React from 'react'
@@ -20,7 +21,7 @@ const pages = async ({params}:{params:{postId:string}}) => {
           createdAt={post.createdAt}    
       /></div>
       <div className="w-full md:w-2/3"><Comment parentId={post._id}/></div>
-      <div>comments</div>
+      <CommentSection postId={post._id}/>
     </div>
   )
 }
