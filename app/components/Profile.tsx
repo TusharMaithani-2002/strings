@@ -34,7 +34,7 @@ const Profile = () => {
       "
         >
 
-          <Link href={'/profile'}>
+          <Link href={`/profile/${user._id}`}>
           <Image
             src={user?.profileImage || session?.user?.image as string}
             alt="profile-image"
@@ -45,9 +45,9 @@ const Profile = () => {
           </Link>
 
         <div className="flex flex-col gap-3">
-          <div className="text-gray-500">{user?.name || session?.user?.name}</div>
+          <Link href={`/profile/${user._id}`} className="text-gray-500">{user?.name || session?.user?.name}</Link>
 
-          <div className="text-sm text-gray-500">{user?.email || session?.user?.email}</div>
+          <Link href={`/profile/${user._id}`} className="text-sm text-gray-500">{user?.email || session?.user?.email}</Link>
 
  
             <Button className="bg-orange-500 rounded-lg p-2 text-lg text-white w-full

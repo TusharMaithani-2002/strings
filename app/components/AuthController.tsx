@@ -49,8 +49,8 @@ const AuthController = () => {
         <div className="text-center text-gray-700 mb-2">Or with</div>
 
         <div className="flex flex-col items-center gap-2">
-          <Button className="bg-blue-500 rounded-md p-2 text-white flex justify-evenly w-[250px] h-[40px] items-center" clickAction={()=>signIn("google",{callbackUrl:'/onboarding'})}> <Image src={"/google.png"} alt="google icon" width={15} height={15}/> SignIn with google </Button>
-          <Button className="bg-red-500 rounded-md p-2 text-white w-[250px] h-[40px] flex justify-evenly items-center" clickAction={()=>signIn("github",{callbackUrl:'/onboarding'})}><Image src={"/github-logo.png"} alt="github icon" width={15} height={15}/>SingIn with github</Button>
+          <Button className="bg-blue-500 rounded-md p-2 text-white flex justify-evenly w-[250px] h-[40px] items-center" clickAction={()=>signIn("google",{callbackUrl:'/home'})}> <Image src={"/google.png"} alt="google icon" width={15} height={15}/> SignIn with google </Button>
+          <Button className="bg-red-500 rounded-md p-2 text-white w-[250px] h-[40px] flex justify-evenly items-center" clickAction={()=>signIn("github",{callbackUrl:'/home'})}><Image src={"/github-logo.png"} alt="github icon" width={15} height={15}/>SingIn with github</Button>
         </div>
       </div>
     </div>

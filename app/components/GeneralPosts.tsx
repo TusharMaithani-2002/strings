@@ -2,9 +2,14 @@
 import { getAllPost } from '@/actions/post.action'
 import PostCard from './PostCard';
 
-const GeneralPosts = async() => {
+interface Props {
+  userId?:string;
+  postType?:string;
+}
 
-  const posts = await getAllPost();
+const GeneralPosts = async({userId,postType}:Props) => {
+
+  const posts = await getAllPost(userId,postType);
 
   return (
     <div className="flex flex-1 flex-col sm:pb-5">

@@ -35,10 +35,23 @@ export const addPost = async (post:PostProps,path?:string) => {
     }
 }
 
-export const getAllPost = async () => {
+export const getAllPost = async (userId?:string,postType?:string) => {
     try {
+
+        const query = {};
+
+        if(userId) {
+            query.author = userId
+        }
+
+        if(postType === 'comments') {
+            query.parent = { $ne: null } 
+        } else query.parent = null;
+
+        console.log('post.action.51')
+        console.log(query)
         await connectToDB();
-        const posts = await Post.find({parent:null},{
+        const posts = await Post.find(query,{
             "images":1,
             "author":1,
             "likesCount":1,
