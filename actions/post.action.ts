@@ -38,7 +38,7 @@ export const addPost = async (post:PostProps,path?:string) => {
 export const getAllPost = async (userId?:string,postType?:string) => {
     try {
 
-        const query = {};
+        const query: {author?:string,parent?:{}|null} = {};
 
         if(userId) {
             query.author = userId
@@ -127,4 +127,48 @@ export const getPostComments = async (postId:string) => {
     }
 }
 
-// export const addComment = async (post:PostProps,parentId:string) => {}
+export const fetchAllChildStrings = async (postId:string) => {
+    try {
+        const childrenPosts = await Post.find({parent:postId})
+        const descendantStrings:any[] = []
+
+        for(const child of childrenPosts) {
+            const descendants:any[] = await fetchAllChildStrings(child._id);
+            descendantStrings.push(child._id,...descendants)
+        }
+
+        return descendantStrings;
+    } catch(err:any) {
+        throw new Error('Error while fetching parent strings message: '+err.message)
+    }
+}
+
+
+export const deletePost = async (postId:string,path:string) => {
+    try {
+        connectToDB();
+
+        // finding the main post
+        const mainPost = await Post.findById(postId);
+
+        if(!mainPost) {
+            throw new Error('Post not found! message');
+        }
+
+        // finding all the children posts for the post
+        const descendantPosts = await fetchAllChildStrings(postId);
+
+        descendantPosts.push(postId);
+
+        // TODO: implement a functionality to delete post from group also
+
+
+        await Post.deleteMany({
+            _id: {$in:descendantPosts}
+        })
+
+        revalidatePath(path);
+    } catch(err:any) {
+        throw new Error('Error while deleting post message: '+err.message)
+    }
+} 

@@ -5,9 +5,10 @@ import { FaRegShareFromSquare } from "react-icons/fa6";
 import { FaRegCommentDots } from "react-icons/fa";
 import PostImageViewer from "../(root)/create/components/PostImageViewer";
 import { formatDateString } from "../utils/date";
-import { PostData } from "../types/postTypes";
 import Link from "next/link";
 import LikeButton from "./LikeButton";
+import PostSetting from "./PostSetting";
+
 
 interface PostCardProps {
   id: string;
@@ -42,7 +43,7 @@ const PostCard = ({
 
   return (
     <div
-      className="border-b-2 border-r-2 bg-white overflow-hidden flex cursor-pointer
+      className="border-b-2 border-r-2 bg-white overflow-hidden flex
     "
     >
       <div className="hidden md:flex md:flex-col md:p-2 md:items-center">
@@ -57,27 +58,33 @@ const PostCard = ({
       </div>
 
       <div className="flex flex-col w-full py-2 px-5">
-        <div className="w-full flex items-center justify-between px-3 pb-3">
-          <div className="md:hidden ">
-            <Image
-              src={author.profileImage}
-              width={50}
-              height={50}
-              className="rounded-full bg-blue-400"
-              alt={"profile"}
-            />
-          </div>
-          <div className="flex flex-col md:flex-row md:justify-between w-full items-center">
-            <div className="flex items-center text-gray-400">
-              <span className="ml-2">{author.username}</span>
+        <div className="flex items-center">
+          <div className="w-full flex items-center justify-evenly px-3">
+            <div className="md:hidden">
+              <Image
+                src={author.profileImage}
+                width={50}
+                height={50}
+                className="rounded-full bg-blue-400"
+                alt={"profile"}
+              />
             </div>
-            <div className="text-sm text-gray-400">
-              {formatDateString(createdAt.toDateString())}
+            <div className="flex flex-col md:flex-row md:justify-between w-2/3 items-center">
+              <div className="flex items-center text-gray-400">
+                <span className="ml-2">{author.username}</span>
+              </div>
+              <div className="text-sm text-gray-400">
+                {formatDateString(createdAt.toDateString())}
+              </div>
             </div>
           </div>
+
+
+        <PostSetting postId={id}/>
+
         </div>
 
-        <div className="flex flex-row h-full">
+        <div className="flex flex-row h-full mt-2">
           <div className="w-full flex flex-col justify-between items-center">
             <div className="overflow-hidden">
               {images?.length ? (
@@ -106,9 +113,7 @@ const PostCard = ({
                   style={{ height: "25px", width: "25px" }}
                   className="fill-green-600 cursor-pointer"
                 />
-                <span>
-                {repliesCount}
-                </span>
+                <span>{repliesCount}</span>
               </Link>
 
               <div>
