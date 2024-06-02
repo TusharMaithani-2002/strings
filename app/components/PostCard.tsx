@@ -25,6 +25,7 @@ interface PostCardProps {
   images?: string[];
   createdAt: Date;
   content: string;
+  parent?:string;
 }
 
 const PostCard = ({
@@ -38,6 +39,7 @@ const PostCard = ({
   images,
   createdAt,
   content,
+  parent
 }: PostCardProps) => {
   let liked = likedIds?.indexOf(author._id);
 
@@ -80,7 +82,7 @@ const PostCard = ({
           </div>
 
 
-        <PostSetting postId={id}/>
+        <PostSetting postId={id} parent={parent}/>
 
         </div>
 

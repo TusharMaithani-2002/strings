@@ -9,12 +9,33 @@ import Button from "./ui/Button";
 import AlertDialogImp from "../components/AlertDialogImp";
 import { MdOutlineDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { deletePost } from "@/actions/post.action";
 
-const Page = ({postId}:{postId:string}) => {
+interface Props {
+  postId:string;
+  parent?:string;
+}
 
-    const pathname = usePathname();
+const Page = ({postId,parent}:Props) => {
+
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    await deletePost(postId,pathname)
+
+    const pathnameId = pathname.split('/').pop();
+    
+    if(postId == pathnameId) {
+      console.log(`/post/${parent}`)
+      // if(parent) redirect(`/post/${parent}`);
+      // else redirect('/home')
+
+      if(parent) router.push(`/post/${parent}`);
+      else router.push('/home')
+    }
+  }
   return (
     <div>
       <Popover>
@@ -26,17 +47,17 @@ const Page = ({postId}:{postId:string}) => {
         </PopoverTrigger>
         <PopoverContent className="w-[100px] md:w-[200px]">
           <div className="flex flex-col">
-            <Button className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-sm m-2 w-[60px] md:w-[140px]">
+            <span className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-sm m-2 w-[60px] md:w-[140px]">
             
             <AlertDialogImp
               content={"You sure want to delete this post?"}
-              action={async () => await deletePost(postId,pathname)}
+              action={handleDelete}
               actionDescription="Delete"
               title="Delete Post"
               trigger={<MdOutlineDelete className="h-[30px] w-[30px]" />}
               triggerDescription={"delete"}
             />
-            </Button>
+            </span>
             <Button className="bg-green-500 text-white hover:bg-green-600 p-2 rounded-sm m-2 w-[60px] md:w-[140px]"><FaRegEdit 
             className="h-[30px] w-[30px]"/> <span className="text-white hidden md:block">Edit</span></Button>
           </div>

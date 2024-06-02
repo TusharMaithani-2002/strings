@@ -60,7 +60,8 @@ export const getAllPost = async (userId?:string,postType?:string) => {
             "content":1,
             "group":1,
             "likedIds":1,
-            "createdAt":1
+            "createdAt":1,
+            "parent":1
         }).populate({path:'author',select:'_id username profileImage'}).sort({createdAt:"desc"});
         return posts;
     } catch(error:any) {
@@ -162,10 +163,18 @@ export const deletePost = async (postId:string,path:string) => {
 
         // TODO: implement a functionality to delete post from group also
 
-
+        // deleting post
         await Post.deleteMany({
             _id: {$in:descendantPosts}
         })
+
+        // reducing the replies count from parent
+        const parent = await Post.findById(mainPost.parent);
+        // if you get parent reduce like count
+        if(parent) {
+            parent.repliesCount = parent.repliesCount - 1;
+            await parent.save();
+        }
 
         revalidatePath(path);
     } catch(err:any) {
