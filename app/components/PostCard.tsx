@@ -26,6 +26,7 @@ interface PostCardProps {
   createdAt: Date;
   content: string;
   parent?:string;
+  showFullContent?:boolean;
 }
 
 const PostCard = ({
@@ -39,10 +40,15 @@ const PostCard = ({
   images,
   createdAt,
   content,
-  parent
+  parent,
+  showFullContent
 }: PostCardProps) => {
   let liked = likedIds?.indexOf(author._id);
 
+  const revalidatePathLink = () => {
+    if(showFullContent) return `/post/${id}`
+    else return `/post/${parent}`;
+  }
   return (
     <div
       className="border-b-2 border-r-2 bg-white overflow-hidden flex
@@ -100,13 +106,13 @@ const PostCard = ({
               className="text-gray-700 text-left"
               dangerouslySetInnerHTML={{
                 __html:
-                  content.length > 305
+                  !showFullContent && content.length > 305
                     ? content.substring(0, 305) + "..."
                     : content,
               }}
             ></p>
             <div className="p-3 text-black text-sm flex flex-row items-center justify-between w-full">
-              <LikeButton liked={liked} likesCount={likesCount} postId={id} />
+              <LikeButton liked={liked} likesCount={likesCount} postId={id} path={revalidatePathLink()} />
               <Link
                 href={`/post/${id}`}
                 className=" flex cursor-pointer justify-center items-center gap-2"

@@ -19,7 +19,8 @@ const pages = async ({params}:{params:{postId:string}}) => {
           likesCount={post.likesCount}  
           repliesCount={post.repliesCount}
           createdAt={post.createdAt}
-          parent={post.parent}    
+          parent={post.parent}
+          showFullContent={true}
       /></div>
       <div className="w-full md:w-2/3"><Comment parentId={post._id}/></div>
       <CommentSection postId={post._id}/>
