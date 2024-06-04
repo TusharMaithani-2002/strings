@@ -15,6 +15,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
         const fetchUser = async() => {
             
             try {
+                // @ts-ignore
                 const fetchedUser = await getUser(session?.user?.id);
                 setUser(fetchedUser);
             } catch(error:any) {
@@ -23,6 +24,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
         }
 
         fetchUser();
+        // @ts-ignore
     },[session,session?.user,session?.user?.id])
 
     return <AppContext.Provider value={{user,setUser,openNavLabel,setOpenNavLabel}}>

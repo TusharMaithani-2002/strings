@@ -11,16 +11,22 @@ import { MdOutlineDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { redirect, usePathname, useRouter } from "next/navigation";
 import { deletePost } from "@/actions/post.action";
+import { useAppContext } from "../context/context";
 
 interface Props {
   postId:string;
   parent?:string;
+  author:string;
 }
 
-const Page = ({postId,parent}:Props) => {
+const Page = ({postId,parent,author}:Props) => {
 
   const pathname = usePathname();
   const router = useRouter();
+  const {user} = useAppContext();
+
+
+  if(user?._id != author) return null;
 
   const handleDelete = async () => {
     await deletePost(postId,pathname)

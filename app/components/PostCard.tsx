@@ -82,7 +82,7 @@ const PostCard = ({
           </div>
 
 
-        <PostSetting postId={id} parent={parent}/>
+        <PostSetting postId={id} parent={parent} author={author._id}/>
 
         </div>
 
