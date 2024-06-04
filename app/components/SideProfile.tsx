@@ -1,38 +1,33 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Button from "./ui/Button";
-import { signOut, useSession } from 'next-auth/react';
-import { getUser } from "@/actions/user.action";
-import Link from "next/link";
+
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAppContext } from "../context/context";
+import Image from "next/image";
+import { signOut, useSession } from "next-auth/react";
+import Button from "./ui/Button";
+import Link from "next/link";
 
-const Profile = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const {user} = useAppContext();
-  const {data:session} = useSession();
+const SideProfile = () => {
 
-  return (
-    <div className="relative">
-      {!isOpen && <Image
+    // @ts-ignore
+    const {user} = useAppContext();
+    const {data:session} = useSession();
+
+    return <Popover>
+        <PopoverTrigger>
+        <Image
         src={user?.profileImage || session?.user?.image as string}
         alt="profile-image"
         width={40}
         height={40}
         className="rounded-full cursor-pointer object-fill"
-        onClick={() => {
-          setIsOpen((prev) => !prev);
-        }}
-      />}
+      />
+        </PopoverTrigger>
 
-      {isOpen && (
-        <div
-          className="modal absolute top-0 right-0 w-[250px] rounded-md
-      flex flex-col gap-3 p-3 text-center
-      transition-all items-center
-       justify-between bg-white duration-300 ease-out
-      "
-        >
+        <PopoverContent className="modal w-[250px] rounded-md
+      flex flex-col gap-3 p-3 text-center items-center
+       justify-between bg-white m-4">
+
 
           <Link href={`/profile/${user._id}`}>
           <Image
@@ -60,19 +55,10 @@ const Profile = () => {
             >
               Sign out
             </Button>
-            <Button
-              className="bg-white text-orange-500 border border-orange-500 w-full p-2 text-lg rounded-lg
-              hover:bg-orange-300 hover:text-white
-              "
-              clickAction={() => setIsOpen((prev) => !prev)}
-            >
-              cancel
-            </Button>
         </div>
-        </div>
-      )}
-    </div>
-  );
-};
+    
+        </PopoverContent>
+    </Popover>
+}
 
-export default Profile;
+export default SideProfile;
