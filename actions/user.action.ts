@@ -4,6 +4,7 @@ import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
 import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 // interfaces
@@ -70,8 +71,27 @@ export const getUserName = async (id : string) => {
     }
 }
 
-// export const currentUser = async () => {
+export const savePostToUserAccount = async (postId:string,userId:string,path?:string) => {
 
-//     const session = await getServerSession();
-//     console.log(session);
-// }
+    try {
+        await connectToDB();
+        const user = await getUser(userId);
+
+        if(!user) throw Error('User not found!');
+
+        const savedPostIndex = user?.savedPosts.indexOf(postId);
+
+        if(savedPostIndex === -1) {
+            user?.savedPosts.push(postId);
+        } else {
+            user?.savedPosts.pop(savedPostIndex);
+        }
+
+        await user.save();
+
+        if(path) revalidatePath(path);
+
+    } catch(error:any) {
+        throw new Error('Error while saving post! message: '+error.message);
+    }
+}

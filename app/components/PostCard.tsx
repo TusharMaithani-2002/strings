@@ -8,6 +8,7 @@ import { formatDateString } from "../utils/date";
 import Link from "next/link";
 import LikeButton from "./LikeButton";
 import PostSetting from "./PostSetting";
+import SavePost from "./SavePost";
 
 
 interface PostCardProps {
@@ -49,6 +50,7 @@ const PostCard = ({
     if(showFullContent) return `/post/${id}`
     else return `/post/${parent}`;
   }
+
   return (
     <div
       className="border-b-2 border-r-2 bg-white overflow-hidden flex
@@ -131,12 +133,7 @@ const PostCard = ({
                 />
               </div>
 
-              <div className="ml-1">
-                <BsSave
-                  style={{ height: "25px", width: "25px" }}
-                  className="fill-green-600 cursor-pointer"
-                />
-              </div>
+              <SavePost postId={id} path=""/>
             </div>
           </div>
         </div>

@@ -41,6 +41,13 @@ const UserSchema = new Schema({
       ref: "Post",
     },
   ],
+
+  savedPosts: [
+    {
+      type:Schema.Types.ObjectId,
+      ref:"Post"
+    }
+  ]
 });
 
 const User = models.User || model("User", UserSchema);
