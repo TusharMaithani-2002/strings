@@ -1,11 +1,10 @@
 "use server";
 
+import Post from "@/app/models/post";
 import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
-import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
+
 
 // interfaces
 interface ProfileProps {
@@ -71,7 +70,7 @@ export const getUserName = async (id : string) => {
     }
 }
 
-export const savePostToUserAccount = async (postId:string,userId:string,path?:string) => {
+export const savePostToUserAccount = async (postId:string,userId:string,path:string="") => {
 
     try {
         await connectToDB();
@@ -80,18 +79,38 @@ export const savePostToUserAccount = async (postId:string,userId:string,path?:st
         if(!user) throw Error('User not found!');
 
         const savedPostIndex = user?.savedPosts.indexOf(postId);
-
         if(savedPostIndex === -1) {
             user?.savedPosts.push(postId);
         } else {
             user?.savedPosts.pop(savedPostIndex);
         }
-
         await user.save();
 
-        if(path) revalidatePath(path);
+        revalidatePath(path);
 
     } catch(error:any) {
         throw new Error('Error while saving post! message: '+error.message);
+    }
+}
+
+export const getSavedPosts = async (userId:string) => {
+
+    try {
+
+        const user = await User.findById(userId,{
+            "savedPosts":1
+        }).populate({
+            path:'savedPosts',
+            populate:{
+                path:"author",
+                select:"_id name username profileImage"
+            }
+        });
+
+        return user?.savedPosts;
+
+
+    } catch(error : any) {
+        throw new Error('Error while fetching saved posts! message: '+error.message);
     }
 }

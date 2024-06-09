@@ -3,10 +3,13 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GeneralPosts from "@/app/components/GeneralPosts";
+import SavedPost from "@/app/components/SavedPost";
 
 const Page = async ({ params }: { params: { profileId: string } }) => {
-  if (!params.profileId) redirect("/home");
-  const user = await getUser(params.profileId);
+
+  const {profileId} = params;
+  if (!profileId) redirect("/home");
+  const user = await getUser(profileId);
 
   return (
     <div className="w-full flex flex-col items-center md:min-h-[calc(100vh-80px)] md:max-h-[calc(100vh-80px)] 
@@ -42,9 +45,9 @@ const Page = async ({ params }: { params: { profileId: string } }) => {
           </TabsList>
 
             <div className="">
-            <TabsContent value="posts" className="w-full"><GeneralPosts userId={params.profileId}/></TabsContent>
-            <TabsContent value="comments"><GeneralPosts userId={params.profileId} postType="comments"/></TabsContent>
-            <TabsContent value="saved">saved</TabsContent>
+            <TabsContent value="posts" className="w-full"><GeneralPosts userId={profileId}/></TabsContent>
+            <TabsContent value="comments"><GeneralPosts userId={profileId} postType="comments"/></TabsContent>
+            <TabsContent value="saved"><SavedPost userId={profileId} /></TabsContent>
             </div>
 
         </Tabs>
