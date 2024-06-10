@@ -81,9 +81,9 @@ export const updatePostLikes = async(postId:string,userId:string,liked:number,pa
         if(liked !== -1) {
             // post liked, removing post
             post?.likedIds.splice(liked,1);
-            post.likedCount = post.likesCount - 1;
+            post.likesCount = post.likesCount - 1;
             const filteredLikedPosts = user?.likedPosts.filter((post:string) => post !== postId)
-            user.likedPost = filteredLikedPosts;
+            user.likedPosts = filteredLikedPosts;
             
 
         } else {
