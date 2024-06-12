@@ -1,28 +1,30 @@
 "use client";
 import { savePostToUserAccount } from "@/actions/user.action";
-import { useState } from "react";
 import { BsSave, BsSaveFill } from "react-icons/bs";
 import { useAppContext } from "../context/context";
+import { usePathname } from "next/navigation";
 
 interface Props {
   postId: string;
-  path?: string;
 }
 
-const SavePost = ({ postId, path }: Props) => {
+const SavePost = ({ postId }: Props) => {
   //@ts-ignore
-  const { user } = useAppContext();
-  const [saved, setSave] = useState(user?.savedPosts?.indexOf(postId) != -1);
+  const { user, savedPosts , setSavedPosts } = useAppContext();
 
-  console.log(user, saved);
+  const pathname = usePathname();
 
   const handleSavePost = async () => {
-    setSave((prev) => !prev);
-    await savePostToUserAccount(postId, user._id, path);
+    let currentSavedPosts:Set<string> = savedPosts;
+    if(currentSavedPosts.has(postId)) currentSavedPosts.delete(postId);
+    else currentSavedPosts.add(postId);
+
+    setSavedPosts(currentSavedPosts)
+    await savePostToUserAccount(postId, user._id, pathname);
   };
   return (
     <div className="ml-1">
-      {saved ? (
+      {savedPosts?.has(postId) ? (
         <BsSaveFill
           style={{ height: "25px", width: "25px" }}
           className={`cursor-pointer fill-green-600`}

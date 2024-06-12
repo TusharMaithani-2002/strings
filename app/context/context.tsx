@@ -9,6 +9,7 @@ const AppContext = createContext({});
 export const AppProvider = ({children}:{children:ReactNode}) => {
     const [user,setUser] = useState({});
     const [openNavLabel,setOpenNavLabel] = useState(true);
+    const [savedPosts,setSavedPosts] = useState<Set<string>>();
     const {data:session} = useSession();
 
     useEffect(()=> {
@@ -18,6 +19,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
                 // @ts-ignore
                 const fetchedUser = await getUser(session?.user?.id);
                 setUser(fetchedUser);
+                setSavedPosts(new Set(fetchedUser?.savedPosts));
             } catch(error:any) {
                 throw new Error('Error while fetching user: '+error.message);
             }
@@ -27,7 +29,9 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
         // @ts-ignore
     },[session,session?.user,session?.user?.id])
 
-    return <AppContext.Provider value={{user,setUser,openNavLabel,setOpenNavLabel}}>
+    return <AppContext.Provider value={{user,setUser,openNavLabel,setOpenNavLabel,
+        savedPosts,setSavedPosts
+    }}>
         {children}
     </AppContext.Provider>
 }

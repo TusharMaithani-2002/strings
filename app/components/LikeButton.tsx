@@ -22,6 +22,7 @@ const LikeButton = ({liked,likesCount,postId,path}:Props) => {
         setIsLiked(prev => !prev);
         if(isLiked) {setLikes(prev=>prev-1)}
         else setLikes(prev => prev+1);
+        // @ts-ignore
         updatePostLikes(postId,session?.user?.id,liked,path);
     }
   return (

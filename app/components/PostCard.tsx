@@ -133,7 +133,7 @@ const PostCard = ({
                 />
               </div>
 
-              <SavePost postId={id} path=""/>
+              <SavePost postId={id} />
             </div>
           </div>
         </div>
