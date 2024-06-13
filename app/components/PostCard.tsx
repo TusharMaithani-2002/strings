@@ -53,7 +53,7 @@ const PostCard = ({
 
   return (
     <div
-      className="border-b-2 border-r-2 bg-white overflow-hidden flex
+      className=" bg-[rgba(16,16,16,1)] overflow-hidden flex text-white mb-2
     "
     >
       <div className="hidden md:flex md:flex-col md:p-2 md:items-center">
@@ -105,7 +105,7 @@ const PostCard = ({
             </div>
 
             <p
-              className="text-gray-700 text-left"
+              className=" text-left"
               dangerouslySetInnerHTML={{
                 __html:
                   !showFullContent && content.length > 305
@@ -121,15 +121,15 @@ const PostCard = ({
               >
                 <FaRegCommentDots
                   style={{ height: "25px", width: "25px" }}
-                  className="fill-green-600 cursor-pointer"
+                  className="fill-[#E90064] cursor-pointer"
                 />
-                <span>{repliesCount}</span>
+                <span className="text-white">{repliesCount}</span>
               </Link>
 
               <div>
                 <FaRegShareFromSquare
                   style={{ height: "25px", width: "25px" }}
-                  className="fill-green-600 cursor-pointer"
+                  className="fill-[#E90064] cursor-pointer"
                 />
               </div>
 

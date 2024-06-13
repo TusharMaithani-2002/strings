@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="">
+    <div className="bg-[rgba(16,16,16,1)]">
       <Header />
 
       <div className="flex flex-col-reverse justify-between md:flex-row h-[calc(100vh-80px)]">

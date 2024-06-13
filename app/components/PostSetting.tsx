@@ -47,25 +47,25 @@ const Page = ({postId,parent,author}:Props) => {
       <Popover>
         <PopoverTrigger>
           <HiDotsVertical
-            fill="green"
+            fill="#E90064"
             className="h-[25px] w-[30px] cursor-pointer"
           />
         </PopoverTrigger>
-        <PopoverContent className="w-[100px] md:w-[200px]">
+        <PopoverContent className="w-[100px] md:w-[200px] bg-[rgba(16,16,16,1)] border-none">
           <div className="flex flex-col">
-            <span className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-sm m-2 w-[60px] md:w-[140px]">
+            <span className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-sm m-2 w-[60px] md:w-[100px]">
             
             <AlertDialogImp
               content={"You sure want to delete this post?"}
               action={handleDelete}
               actionDescription="Delete"
               title="Delete Post"
-              trigger={<MdOutlineDelete className="h-[30px] w-[30px]" />}
-              triggerDescription={"delete"}
+              trigger={<MdOutlineDelete className="h-[20px] w-[20px]" />}
+              triggerDescription={"Delete"}
             />
             </span>
-            <Button className="bg-green-500 text-white hover:bg-green-600 p-2 rounded-sm m-2 w-[60px] md:w-[140px]"><FaRegEdit 
-            className="h-[30px] w-[30px]"/> <span className="text-white hidden md:block">Edit</span></Button>
+            <Button className="bg-[#E90064] text-white hover:bg-[#e90046]  p-2 rounded-sm m-2 w-[60px] md:w-[100px]"><FaRegEdit 
+            className="h-[20px] w-[20px]"/> <span className="text-white hidden md:block">Edit</span></Button>
           </div>
         </PopoverContent>
       </Popover>

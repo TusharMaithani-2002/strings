@@ -28,13 +28,15 @@ const Comment = ({parentId}:Props) => {
       if(comment) setContent('');
     }
   return (
-    <form className='bg-green-300 p-2 w-full flex items-center justify-around gap-2'>
+    <form className='p-1 w-full flex items-center justify-around gap-2 rounded-xl mt-3 mb-3'>
       {/* <textarea className='w-5/6 rounded-xl p-2 'rows={1} placeholder='reply to post'/> */}
-      <ReactQuill theme="bubble" className='w-full bg-white text-black rounded-lg'
+      <ReactQuill theme="bubble" className='w-full bg-[rgba(16,16,16,1)]  text-white rounded-lg border-2
+      text-lg fill-white
+      border-gray-500'
       value={content}
       onChange={setContent}
       />
-      <Button className='bg-green-700 rounded-full p-3'
+      <Button className='bg-[#E90064]  rounded-full p-3'
       clickAction={()=>handleComment()}
       type="button"
       ><IoMdSend className='fill-white h-[20px] w-[20px]'/></Button>

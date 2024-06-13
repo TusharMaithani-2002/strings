@@ -6,7 +6,7 @@ const CommentSection = async({postId}:{postId:string}) => {
 
     const comments = await getPostComments(postId);
   return (
-    <div className='w-full md:w-2/3 border-l-2'>
+    <div className='w-full md:w-2/3'>
       {
         comments.map((comment,key) => <PostCard 
         key={key}

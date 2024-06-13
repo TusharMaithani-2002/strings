@@ -35,11 +35,11 @@ const LikeButton = ({liked,likesCount,postId,path}:Props) => {
                   ) : (
                     <BsHeart
                       style={{ height: "25px", width: "25px" }}
-                      className="fill-green-600"
+                      className="fill-[#E90064]"
                     />
                   )}
                 </button>
-                <span className="ml-2">{likes}</span>
+                <span className="ml-2 text-white">{likes}</span>
               </div>
   )
 }

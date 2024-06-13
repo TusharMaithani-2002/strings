@@ -10,7 +10,7 @@ const pages = async ({params}:{params:{postId:string}}) => {
   const post = await getPost(params.postId);
   return (
     <div className='w-full flex flex-col items-center overflow-y-auto overflow-x-hidden max-h-[calc(100vh-160px)] md:max-h-[calc(100vh-80px)]'>
-      <div className='w-full md:w-2/3 border-l-2'><PostCard
+      <div className='w-full md:w-2/3'><PostCard
           id={post._id}
           author={post.author}
           content={post.content}

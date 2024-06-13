@@ -38,6 +38,7 @@ const CreatePost = () => {
   const [inputValue, setInputValue] = useState("");
   const [group, setGroup] = useState<any | null>(null); // group id
   const [loading,setLoading] = useState(false);
+  // @ts-ignore
   const { user } = useAppContext();
   const router = useRouter();
 
@@ -71,6 +72,7 @@ const CreatePost = () => {
   };
 
   const hanldeFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    // @ts-ignore
     const files = Array.from(e.target.files);
 
     files.forEach(async(image,i) => {
@@ -83,7 +85,7 @@ const CreatePost = () => {
    
   };
 
-  const handleImage = async(image) => {
+  const handleImage = async(image:any) => {
     const reader = new FileReader();
     reader.onloadend = async() => {
       setLoading(true);
@@ -115,11 +117,11 @@ const CreatePost = () => {
     }
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event:any) => {
     setInputValue(event.target.value);
   };
 
-  const handleInputKeyDown = (event) => {
+  const handleInputKeyDown = (event:any) => {
     if (event.key === "Enter" && inputValue.trim()) {
       setTags([...tags, inputValue.trim()]);
       setInputValue("");
@@ -140,7 +142,7 @@ const CreatePost = () => {
       "
       action=""
     >
-      <div className="text-2xl text-green-500 m-2 font-bold">Create Post</div>
+      <div className="text-2xl text-[#E90064]  m-2 font-bold">Create Post</div>
       <div className="flex justify-center w-full m-3">
         {images && <ImageViewer images={images} />}
       </div>
@@ -149,7 +151,7 @@ const CreatePost = () => {
           htmlFor="input-file"
           className="  "
         >
-          <span className="flex bg-green-500 text-white rounded-md p-2">{loading && <LoadingSpinner />}upload image</span>
+          <span className="flex bg-[#E90064]  text-white rounded-md p-2">{loading && <LoadingSpinner />}upload image</span>
         </label>
         <input
           type="file"
@@ -192,7 +194,7 @@ const CreatePost = () => {
         theme="snow"
         value={content}
         onChange={setContent}
-        className="w-[100%] md:w-2/3 m-4 mb-5 md:overflow-y-auto"
+        className="w-[100%] md:w-2/3 m-4 mb-5 md:overflow-y-auto text-white placeholder:text-white"
         placeholder="enter your thoughts"
       />
       </div>
@@ -224,7 +226,7 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={handleAddTag}
-            className="bg-green-500 text-white px-4 m-1 rounded-md shadow-md hover:bg-green-700 transition duration-300 "
+            className="bg-[#E90064]  text-white px-4 m-1 rounded-md shadow-md hover:bg-[#E90061]  transition duration-300 "
           >
             Add
           </button>
@@ -241,8 +243,8 @@ const CreatePost = () => {
       </button> */}
 
       <Button type="button"
-        className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
-        hover:bg-green-700
+        className="bg-[#E90064]  text-white p-2 px-4 rounded-md mt-3
+        hover:bg-[#E90061] 
         "
         clickAction={()=>handleSubmit()}
         >

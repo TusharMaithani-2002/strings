@@ -27,14 +27,14 @@ const SavePost = ({ postId }: Props) => {
       {savedPosts?.has(postId) ? (
         <BsSaveFill
           style={{ height: "25px", width: "25px" }}
-          className={`cursor-pointer fill-green-600`}
+          className={`cursor-pointer fill-[#E90064]`}
           onClick={handleSavePost}
         />
       ) : (
         <BsSave
           style={{ height: "25px", width: "25px" }}
           onClick={handleSavePost}
-          className="cursor-pointer fill-green-600"
+          className="cursor-pointer fill-[#E90064]"
         />
       )}
     </div>

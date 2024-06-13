@@ -29,7 +29,7 @@ const SideProfile = () => {
        justify-between bg-white m-4">
 
 
-          <Link href={`/profile/${user._id}`}>
+          <Link href={`/profile/${user?._id}`}>
           <Image
             src={user?.profileImage || session?.user?.image as string}
             alt="profile-image"
@@ -40,9 +40,9 @@ const SideProfile = () => {
           </Link>
 
         <div className="flex flex-col gap-3">
-          <Link href={`/profile/${user._id}`} className="text-gray-500">{user?.name || session?.user?.name}</Link>
+          <Link href={`/profile/${user?._id}`} className="text-gray-500">{user?.name || session?.user?.name}</Link>
 
-          <Link href={`/profile/${user._id}`} className="text-sm text-gray-500">{user?.email || session?.user?.email}</Link>
+          <Link href={`/profile/${user?._id}`} className="text-sm text-gray-500">{user?.email || session?.user?.email}</Link>
 
  
             <Button className="bg-orange-500 rounded-lg p-2 text-lg text-white w-full
