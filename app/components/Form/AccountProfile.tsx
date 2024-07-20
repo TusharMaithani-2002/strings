@@ -6,11 +6,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CiCamera } from "react-icons/ci";
 import { FaCamera } from "react-icons/fa";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.bubble.css';
 import { uploadImage } from "@/app/utils/uploadImage";
+import { useAppContext } from "@/app/context/context";
 
 
 const AccountProfile = ({ user ,title}: any) => {
@@ -19,6 +19,9 @@ const AccountProfile = ({ user ,title}: any) => {
   const { data: session } = useSession();
   const [bio,setBio] = useState<string>(user?.bio || 'tell people about yourself');
   const [image,setImage] = useState(user?.profileImage || session?.user?.image);
+
+  //@ts-ignore
+  const {setUser} = useAppContext()
   
   const {register,handleSubmit,formState:{errors},watch} = useForm({
     defaultValues:{
@@ -35,7 +38,7 @@ const AccountProfile = ({ user ,title}: any) => {
       const newImage = await uploadImage(reader.result)
       setImage(newImage);
     }
-    reader.readAsDataURL(e.target.files[0])
+    e.target.files && reader.readAsDataURL(e.target.files[0])
   }
 
   
@@ -44,15 +47,23 @@ const AccountProfile = ({ user ,title}: any) => {
     let modifiedBio = bio;
     if(modifiedBio[0] === '<') modifiedBio = modifiedBio.substring(3);
     if(modifiedBio[modifiedBio.length-1] === '>') modifiedBio = modifiedBio.substring(0,modifiedBio.length-4);
-    const output = {...data,bio:modifiedBio,id:session?.user?.id,profileImage:image,onBoarded:true}
+    //@ts-ignore
+    const output = {...data,bio:modifiedBio,id:session?.user?.id,profileImage:image,onBoarded:true,
+      noOfFollowers:0,
+      noOfFollowings:0
+    }
 
     // if(image !== session?.user?.image) {
     //   const newImageUrl = await uploadImage(image);
     //   data.profileImage = newImageUrl.toString();
     // }
     const response = await updateUserProfile(output);
+
     
-    if(response) title === 'Onboarding' && router.push('/home');
+    if(response){
+      setUser(output)
+       title === 'Onboarding' && router.push('/home');
+    }
   }
   return (
     <form className="flex flex-col items-center h-screen" onSubmit={handleSubmit(onSubmit)}>

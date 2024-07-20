@@ -56,7 +56,9 @@ const PostCard = ({
       className=" bg-[rgba(16,16,16,1)] overflow-hidden flex text-white mb-2
     "
     >
-      <div className="hidden md:flex md:flex-col md:p-2 md:items-center">
+      <Link className="hidden md:flex md:flex-col md:p-2 md:items-center"
+      href={`/profile/${author._id}`}
+      >
         <Image
           src={author.profileImage}
           width={50}
@@ -65,7 +67,7 @@ const PostCard = ({
           alt={"profile"}
         />
         <div className="sm:hidden md:block md:border-r md:border-gray-300 md:h-[85%] " />
-      </div>
+      </Link>
 
       <div className="flex flex-col w-full py-2 px-5">
         <div className="flex items-center">

@@ -26,7 +26,7 @@ const NavItem = ({value,isActive,showLabel}:NavItemProps) => {
 }
 const NavBar = () => {
     const pathname = usePathname();
-    const [openNavLabel,setOpenNavLabel] = useState(true);
+    const [openNavLabel,setOpenNavLabel] = useState(false);
    return (
     <section className='md:min-h-[calc(100vh-80px)] flex md:flex-col items-center
     md:justify-between md:py-8 px-1 bg-[rgba(16,16,16,1)] relative h-[80px]

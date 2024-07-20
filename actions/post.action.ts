@@ -27,9 +27,6 @@ export const addPost = async (post:PostProps,path?:string) => {
         }
         revalidatePath(path as string);
         return newPost;
-        return {
-            success:true,
-        };
     } catch(error:any) {
         throw new Error("Error while creating post! message: "+error.message)
     }
@@ -48,8 +45,6 @@ export const getAllPost = async (userId?:string,postType?:string) => {
             query.parent = { $ne: null } 
         } else query.parent = null;
 
-        console.log('post.action.51')
-        console.log(query)
         await connectToDB();
         const posts = await Post.find(query,{
             "images":1,

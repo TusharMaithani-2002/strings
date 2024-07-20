@@ -8,7 +8,6 @@ const AppContext = createContext({});
 
 export const AppProvider = ({children}:{children:ReactNode}) => {
     const [user,setUser] = useState({});
-    const [openNavLabel,setOpenNavLabel] = useState(true);
     const [savedPosts,setSavedPosts] = useState<Set<string>>();
     const {data:session} = useSession();
 
@@ -20,6 +19,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
                 const fetchedUser = await getUser(session?.user?.id);
                 setUser(fetchedUser);
                 setSavedPosts(new Set(fetchedUser?.savedPosts));
+                console.log('laoding user for context')
             } catch(error:any) {
                 throw new Error('Error while fetching user: '+error.message);
             }
@@ -29,7 +29,7 @@ export const AppProvider = ({children}:{children:ReactNode}) => {
         // @ts-ignore
     },[session,session?.user,session?.user?.id])
 
-    return <AppContext.Provider value={{user,setUser,openNavLabel,setOpenNavLabel,
+    return <AppContext.Provider value={{user,setUser,
         savedPosts,setSavedPosts
     }}>
         {children}

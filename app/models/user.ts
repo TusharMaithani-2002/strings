@@ -19,13 +19,21 @@ const UserSchema = new Schema({
   profileImage: String,
   coverImage: String,
   bio: String,
+  noOfFollowers:{
+    type:Number,
+    default:0,
+  },
+  noOfFollowings:{
+    type:Number,
+    default:0,
+  },
   followers: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  following: [
+  followings: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -50,6 +58,12 @@ const UserSchema = new Schema({
   ],
 
   posts: [
+    {
+      type:Schema.Types.ObjectId,
+      ref:"Post"
+    }
+  ],
+  mentions: [
     {
       type:Schema.Types.ObjectId,
       ref:"Post"
