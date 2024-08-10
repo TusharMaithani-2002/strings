@@ -12,7 +12,7 @@ const FollowButton = ({followerId}:Props) => {
     //@ts-ignore
     const {user} = useAppContext()
     
-    const isFollowed = user?.followings.indexOf(followerId)
+    const isFollowed = user?.followings?.indexOf(followerId)
     const [followed,setFollowed] = useState(isFollowed !== -1)
     
     if(user?._id === followerId) return

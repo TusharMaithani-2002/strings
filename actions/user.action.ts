@@ -15,6 +15,12 @@ interface ProfileProps {
   id: string;
   onBoarded?: Boolean;
 }
+interface Author {
+  name:string;
+  username:string;
+  profileImage:string;
+  _id:string;
+}
 
 export const getUser = async (id: string) => {
   if (!id || id.length == 0) return;
@@ -116,14 +122,20 @@ export const getSavedPosts = async (userId: string) => {
 
 export const getAllFollowers = async (userId: string) => {
   try {
+    console.log('fetching all followers')
     connectToDB();
     const user = await User.findById(userId, {
       followers: 1,
+    }).populate({
+      path:'followers',
+      select: "_id username name profileImage",
+      options: { strictPopulate: false },
     });
 
+    console.log(user)
     if (!user) throw new Error("User not found!");
 
-    return user.followers as string[];
+    return user.followers as Author[];
   } catch (error: any) {
     throw new Error("Error finding followers! message: " + error.message);
   }
@@ -132,12 +144,16 @@ export const getAllFollowings = async (userId: string) => {
   try {
     connectToDB();
     const user = await User.findById(userId, {
-      following: 1,
-    });
+      followings: 1,
+    }).populate({
+      path:'followings',
+      select: "_id username name profileImage",
+      options: { strictPopulate: false },
+    });;
 
     if (!user) throw new Error("User not found!");
 
-    return user.followings as string[];
+    return user.followings as Author[];
   } catch (error: any) {
     throw new Error("Error finding followings! message: " + error.message);
   }

@@ -104,3 +104,17 @@
 .max-h-custom-sm {
     max-height: calc(100vh - 160px);
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #0f1216; /* Example thumb color */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #090c0f; /* Example track color */
+}

@@ -1,22 +1,39 @@
 import Image from "next/image";
 import SocialStatus from "./SocialStatus";
-import { getProfileInfo } from "@/actions/user.action";
-import { Button } from "@/components/ui/button";
+import { getAllFollowers, getAllFollowings, getProfileInfo } from "@/actions/user.action";
 import FollowButton from "./FollowButton";
 
 interface Props {
   profileId: string;
 }
 
-interface CurrentUser {
-  username: string;
-  name: string;
-  profileImage: string;
-  bio: string;
-}
 
+const followers = [
+  {
+    _id:'669bc072260e837cd1a90aff',
+    username: 'tusharmaithani',
+    name: 'Tushar Maithani',
+    profileImage: 'https://lh3.googleusercontent.com/a/ACg8ocJgo7AiFI7EFOiWVktxtWAcd4CCH33VhtWwCCMkj6VLYWNXf_7h=s96-c'
+  }
+]
+// const followings = [
+//   {
+//     _id:'669bc072260e837cd1a90aff',
+//     username: 'tusharmaithani',
+//     name: 'Tushar Maithani',
+//     profileImage: 'https://lh3.googleusercontent.com/a/ACg8ocJgo7AiFI7EFOiWVktxtWAcd4CCH33VhtWwCCMkj6VLYWNXf_7h=s96-c'
+//   }
+// ]
+// const userInfo = []
+
+// const followers = await getAllFollowers(profileId)
 const ProfileHeader = async ({ profileId }: Props) => {
-  const userInfo = await getProfileInfo(profileId);
+  console.log('rendering profile header')
+  const userInfo = await getProfileInfo(profileId); 
+  // let followers 
+  const followings = await getAllFollowings(profileId)
+
+
   return (
     <div className="flex flex-col w-2/3 items-center mb-10 ">
       <div className="flex justify-center items-center w-full">
@@ -38,7 +55,7 @@ const ProfileHeader = async ({ profileId }: Props) => {
             </div>
             <FollowButton followerId={profileId}/>
           </div>
-          <SocialStatus user={userInfo} />
+          <SocialStatus user={userInfo} profileId={profileId} />
         </div>
       </div>
 
