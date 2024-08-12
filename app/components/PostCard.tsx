@@ -9,6 +9,7 @@ import Link from "next/link";
 import LikeButton from "./LikeButton";
 import PostSetting from "./PostSetting";
 import SavePost from "./SavePost";
+import CarouselImageViewer from "./CarouselImageViewer";
 
 
 interface PostCardProps {
@@ -56,9 +57,11 @@ const PostCard = ({
       className=" bg-[rgba(16,16,16,1)] overflow-hidden flex text-white mb-2
     "
     >
-      <Link className="hidden md:flex md:flex-col md:p-2 md:items-center"
-      href={`/profile/${author._id}`}
+      <div className="hidden md:flex md:flex-col md:p-2 md:items-center"
       >
+        <Link
+        href={`/profile/${author._id}`}
+        >
         <Image
           src={author.profileImage}
           width={50}
@@ -66,8 +69,9 @@ const PostCard = ({
           className="rounded-full bg-blue-400"
           alt={"profile"}
         />
+        </Link>
         <div className="sm:hidden md:block md:border-r md:border-gray-300 md:h-[85%] " />
-      </Link>
+      </div>
 
       <div className="flex flex-col w-full py-2 px-5">
         <div className="flex items-center">
@@ -100,7 +104,7 @@ const PostCard = ({
           <div className="w-full flex flex-col justify-between items-center">
             <div className="overflow-hidden">
               {images?.length ? (
-                <PostImageViewer images={images as string[]} />
+                <CarouselImageViewer images={images as string[]} />
               ) : (
                 <span></span>
               )}
