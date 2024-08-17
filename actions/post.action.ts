@@ -85,7 +85,7 @@ export const updatePostLikes = async(postId:string,userId:string,liked:number,pa
 
         if(!post) throw new Error('post not found!');
 
-        if(liked !== -1) {
+        if(liked) {
             // post liked, removing post
             post?.likedIds.splice(liked,1);
             post.likesCount = post.likesCount - 1;

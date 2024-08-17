@@ -45,7 +45,7 @@ const PostCard = ({
   parent,
   showFullContent
 }: PostCardProps) => {
-  let liked = likedIds?.indexOf(author._id);
+  // let liked = likedIds?.indexOf(author._id);
 
   const revalidatePathLink = () => {
     if(showFullContent) return `/post/${id}`
@@ -120,7 +120,7 @@ const PostCard = ({
               }}
             ></p>
             <div className="p-3 text-black text-sm flex flex-row items-center justify-between w-full">
-              <LikeButton liked={liked} likesCount={likesCount} postId={id} path={revalidatePathLink()} />
+              <LikeButton likedIds={likedIds} likesCount={likesCount} postId={id} path={revalidatePathLink()} />
               <Link
                 href={`/post/${id}`}
                 className=" flex cursor-pointer justify-center items-center gap-2"

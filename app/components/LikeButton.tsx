@@ -5,17 +5,21 @@ import React, { useState } from 'react'
 import { BsFillHeartFill, BsHeart } from 'react-icons/bs';
 
 interface Props {
-    liked:number;
+    likedIds:string[];
     likesCount:number;
     path?:string;
     postId:string
 }
 
-const LikeButton = ({liked,likesCount,postId,path}:Props) => {
+const LikeButton = ({likedIds,likesCount,postId,path}:Props) => {
     const {data:session} = useSession()
 
     const [likes,setLikes] = useState<number>(Number.isNaN(likesCount)?0:likesCount);
-    const [isLiked,setIsLiked] = useState<boolean>(liked !== -1);
+    
+    //@ts-ignore
+    let liked = likedIds?.includes(session?.user?.id)
+    console.log(session?.user?.id)
+    const [isLiked,setIsLiked] = useState<boolean>(liked);
 
     const handleLike = async() => {
 
