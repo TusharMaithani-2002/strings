@@ -2,9 +2,8 @@
 import LoadingModal from '@/app/components/LoadingModal';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
-import { fetchData } from 'next-auth/client/_utils';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 interface Author {
     name:string;
@@ -24,6 +23,7 @@ const CustomList = ({actionType,action,title,dataUrl,profileId}:Props) => {
 
   const [data,setData] = useState<Author[]>([])
   const [loading,setLoading] = useState(false)
+  const [filteredData,setFilteredData] = useState<Author[]>([])
 
   useEffect(() => {
    
@@ -36,6 +36,7 @@ const CustomList = ({actionType,action,title,dataUrl,profileId}:Props) => {
 
       if(response.data?.length > 0)
       setData(response.data)
+    setFilteredData(response.data)
     setLoading(false)
     }
 
@@ -48,6 +49,23 @@ const CustomList = ({actionType,action,title,dataUrl,profileId}:Props) => {
     }
   },[dataUrl,profileId])
 
+  const handleInputChange = (e:ChangeEvent<HTMLInputElement>) => {
+
+    const value = e.target.value.trim()
+    
+    if(value === '') {
+      if(filteredData.length === data.length) return
+      setFilteredData(data)
+    }
+    const dataAfterFilter = data.filter(user => {
+      return user.username.includes(value) ||
+      user.name.includes(value) ||
+      user._id === value
+    })
+
+    setFilteredData(dataAfterFilter)
+  }
+
 
   return loading ? <LoadingModal show={loading}/> : (
     <div className='bg-[#010102] p-2 rounded-sm w-[400px]'>
@@ -56,11 +74,12 @@ const CustomList = ({actionType,action,title,dataUrl,profileId}:Props) => {
 
         <input type="text" className='outline-none rounded-lg p-2 w-full mb-2'
         placeholder={`search ${title?.toLowerCase()}`}
+        onChange={handleInputChange}
         />
 
         <div className='overflow-y-auto max-h-[450px] custom-scrollbar::-webkit-scrollbar-thumb'>
       {
-        data?.map((user,index) => (
+        filteredData?.map((user,index) => (
             <div key={index} className='flex justify-evenly p-1 items-center'>
                 <div className='w-[40px] h-[40px] rouned-full'><Image src={user.profileImage} alt='profile'
                 className='rounded-full'
