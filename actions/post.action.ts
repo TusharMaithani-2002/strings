@@ -77,7 +77,7 @@ export const getAllPost = async (userId?:string,postType?:string) => {
 }
 
 
-export const updatePostLikes = async(postId:string,userId:string,liked:number,path:string="") => {
+export const updatePostLikes = async(postId:string,userId:string,liked:boolean,path:string="") => {
     try {
 
         const post = await Post.findById(postId);
