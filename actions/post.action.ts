@@ -18,13 +18,25 @@ interface PostProps {
 export const addPost = async (post:PostProps,path?:string) => {
     try {
         await connectToDB();
-        const newPost = await Post.create(post);
 
+        const newPost = await Post.create(post);
+        const saveMentionInUser = post.mentions?.map(async (userId)=> {
+            const user = await User.findById(userId,{
+                "mentions":1
+            })
+
+            user.mentions.push(newPost._id)
+
+            return user.save()
+        })
+
+        if(saveMentionInUser) Promise.all(saveMentionInUser)
         if(post.parent) {
             const parentPost = await Post.findById(post.parent);
             parentPost.repliesCount = parentPost.repliesCount + 1;
             await parentPost.save();
         }
+
         revalidatePath(path as string);
         return newPost;
     } catch(error:any) {

@@ -204,15 +204,16 @@ export const getAllMentionedPosts = async (userId: string) => {
     await connectToDB();
     const user = await User.findById(userId, {
       mentions: 1,
-    })
-      .populate("mentions")
-      .populate({
-        path: "author",
-        select: "_id username name profileImage",
-        options: { strictPopulate: false },
-      });
+    }).populate({
+        path: "mentions",
+        populate:{
+          path: "author",
+          select: "_id username name profileImage",
+          ptions: { strictPopulate: false },
+        }
+      })
 
-    return user?.mentions;
+    return user?.mentions
   } catch (error: any) {
     throw new Error(
       "Error while getting all mentioned posts! message: " + error.message

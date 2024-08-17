@@ -1,6 +1,7 @@
 "use client";
 import { getAllMentionedPosts } from "@/actions/user.action";
 import PostCard from "@/app/components/PostCard";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface Post {
@@ -16,14 +17,17 @@ interface Post {
   content: string;
 }
 const MentionPosts = ({ userId }: { userId: string }) => {
+  console.log('mentions')
   const [posts, setPosts] = useState<Post[]>();
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const data = await getAllMentionedPosts(userId);
+      const data = await axios.get(`/api/clientrequest/mentionedPosts/${userId}`)
+      console.log(data.data)
       setPosts(data.data);
     };
     fetchPosts();
+    console.log('fetching mentions')
   }, [userId]);
   return (
     <div className="flex flex-1 flex-col sm:pb-5">
