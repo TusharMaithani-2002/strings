@@ -4,11 +4,19 @@ const activitySchema = new Schema({
     post:{
         type:Schema.Types.ObjectId,
         ref:"Post",
-        required:true
     },
     performer:{
         type:Schema.Types.ObjectId,
         ref:"User",
+        required:true
+    },
+    receiver:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
+    activity:{
+        type:String,
         required:true
     }
 });

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Button from './ui/Button';
 import { useState } from 'react';
 import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
+import { useAppContext } from '../context/context';
 
 interface NavItemProps {
     value: typeof navConstants[0],
@@ -13,13 +14,18 @@ interface NavItemProps {
 }
 const NavItem = ({value,isActive,showLabel}:NavItemProps) => {
     const {label,icon:Icon,link} = value;
+
+    const { activityCount } = useAppContext()
     return (
         <Link href={link} className={`flex justify-around items-center p-2
         md:h-[50px] hover:bg-[#E90064] md:text-lg ${showLabel ? 'w-[200px]':'w-[60px]'}
         transition-all duration-200 ease-in-out text-white hover:text-white ${isActive ? 'text-white bg-[#E90064] text-xl' : ''}
         rounded-md
         `}>
-            <Icon className='h-[25px] w-[25px]' />
+            {
+              label === 'Activities' && activityCount > 0 ? <span className='rounded-full bg-[#E90064] h-[15px] w-[15px] text-white text-xs text-center z-50'>{activityCount}</span> : <></>
+            }
+            <Icon className='h-[25px] w-[25px] z-0' />
             <div className={showLabel?'md:block hidden':'hidden'}>{label}</div>
         </Link>
     )

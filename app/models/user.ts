@@ -68,7 +68,17 @@ const UserSchema = new Schema({
       type:Schema.Types.ObjectId,
       ref:"Post"
     }
-  ]
+  ],
+  activities: [
+    {
+      type:Schema.Types.ObjectId,
+      ref:"Activity"
+    }
+  ],
+  unseenCount: {
+    type:Number,
+    default:0
+  }
 });
 
 const User = models.User || model("User", UserSchema);

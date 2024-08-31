@@ -7,7 +7,6 @@ interface Props {
 }
 export const GET = async (request:NextRequest,params:Props) => {
     try {
-        console.log('**********************')
         const url = new URL(request.url)
         const searchParams = new URLSearchParams(url.searchParams)
         const userId = searchParams.get('userId') || ''

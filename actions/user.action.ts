@@ -5,6 +5,7 @@ import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
 import { revalidatePath } from "next/cache";
 import { getAllPost } from "./post.action";
+import Activity from "@/app/models/activity";
 
 // interfaces
 interface ProfileProps {
@@ -16,10 +17,10 @@ interface ProfileProps {
   onBoarded?: Boolean;
 }
 interface Author {
-  name:string;
-  username:string;
-  profileImage:string;
-  _id:string;
+  name: string;
+  username: string;
+  profileImage: string;
+  _id: string;
 }
 
 export const getUser = async (id: string) => {
@@ -52,8 +53,8 @@ export const updateUserProfile = async (profile: ProfileProps) => {
     if (coverImage) user.coverImage = coverImage;
     if (profileImage) user.profileImage = profileImage;
     if (onBoarded) user.onBoarded = true;
-    user.noOfFollowers = 0
-    user.noOfFollowings = 0
+    user.noOfFollowers = 0;
+    user.noOfFollowings = 0;
 
     user.save();
 
@@ -122,17 +123,17 @@ export const getSavedPosts = async (userId: string) => {
 
 export const getAllFollowers = async (userId: string) => {
   try {
-    console.log('fetching all followers')
+    console.log("fetching all followers");
     connectToDB();
     const user = await User.findById(userId, {
       followers: 1,
     }).populate({
-      path:'followers',
+      path: "followers",
       select: "_id username name profileImage",
       options: { strictPopulate: false },
     });
 
-    console.log(user)
+    console.log(user);
     if (!user) throw new Error("User not found!");
 
     return user.followers as Author[];
@@ -146,10 +147,10 @@ export const getAllFollowings = async (userId: string) => {
     const user = await User.findById(userId, {
       followings: 1,
     }).populate({
-      path:'followings',
+      path: "followings",
       select: "_id username name profileImage",
       options: { strictPopulate: false },
-    });;
+    });
 
     if (!user) throw new Error("User not found!");
 
@@ -164,7 +165,11 @@ export const getAllFollowings = async (userId: string) => {
 userId person to be followed,
 followerId: current session user requesting to follow
 */
-export const addFollower = async (userId: string, followerId: string,path?:string) => {
+export const addFollower = async (
+  userId: string,
+  followerId: string,
+  path?: string
+) => {
   // userId: person to be followed
   // followerId: current session user requesting to follow
 
@@ -181,6 +186,18 @@ export const addFollower = async (userId: string, followerId: string,path?:strin
       follower.followings.push(userId);
       user.noOfFollowers = user.noOfFollowers + 1;
       follower.noOfFollowings = follower.noOfFollowings + 1;
+
+      // create an activity for the action: someone followed
+
+      const activity = await Activity.create({
+        performer: follower._id,
+        receiver: user._id,
+        activity: "followed",
+      });
+
+      user.unseenCount = user.unseenCount + 1;
+      user.activities.push(activity);
+      await user.save();
     } else {
       user.followers.pop(userFollowIndex);
       const followingUserIndex = follower.followings.indexOf(userId);
@@ -205,15 +222,15 @@ export const getAllMentionedPosts = async (userId: string) => {
     const user = await User.findById(userId, {
       mentions: 1,
     }).populate({
-        path: "mentions",
-        populate:{
-          path: "author",
-          select: "_id username name profileImage",
-          ptions: { strictPopulate: false },
-        }
-      })
+      path: "mentions",
+      populate: {
+        path: "author",
+        select: "_id username name profileImage",
+        options: { strictPopulate: false },
+      },
+    });
 
-    return user?.mentions
+    return user?.mentions;
   } catch (error: any) {
     throw new Error(
       "Error while getting all mentioned posts! message: " + error.message
@@ -221,20 +238,75 @@ export const getAllMentionedPosts = async (userId: string) => {
   }
 };
 
-export const getProfileInfo = async (userId:string) => {
+export const getProfileInfo = async (userId: string) => {
   try {
-    if(!userId) throw new Error('User Id not found!')
-    await connectToDB()
-    
+    if (!userId) throw new Error("User Id not found!");
+    await connectToDB();
+
     const userInfo = await getUser(userId);
 
     const posts = await getAllPost(userId);
 
     return {
       ...userInfo._doc,
-      noOfPosts:posts.length
-    }
-  } catch(error:any) {
-    throw new Error('Error while fetching user profile info! message: '+error.message)
+      noOfPosts: posts.length,
+    };
+  } catch (error: any) {
+    throw new Error(
+      "Error while fetching user profile info! message: " + error.message
+    );
   }
-}
+};
+
+export const getUserActivities = async (userId: string) => {
+  try {
+    await connectToDB();
+    const user = await User.findById(userId, {
+      activities: 1,
+    }).populate({
+      path: "activities",
+      options: { strictPopulate: false },
+      populate: {
+        path: "performer",
+        select: "username",
+        options: { strictPopulate: false },
+      },
+    });
+
+    if (!user) throw new Error("user not found");
+    return user.activities;
+  } catch (error: any) {
+    throw new Error("Error while fetching messages " + error.message);
+  }
+};
+
+export const getUnseenCount = async (userId: string) => {
+  try {
+    await connectToDB();
+
+    const user = await User.findById(userId, {
+      unseenCount: 1,
+    });
+
+    return user.unseenCount;
+  } catch (error: any) {
+    throw new Error("error while fetching unseen count " + error.message);
+  }
+};
+
+export const setseenCount = async (userId: string) => {
+  try {
+    await connectToDB();
+
+    const user = await User.findById(userId, {
+      unseenCount: 1,
+    });
+
+    user.unseenCount = 0;
+    await user.save();
+
+    return true;
+  } catch (error: any) {
+    throw new Error("error while seting seen count " + error.message);
+  }
+};

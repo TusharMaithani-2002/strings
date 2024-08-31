@@ -1,5 +1,6 @@
 "use server"
 
+import Activity from "@/app/models/activity";
 import Post from "@/app/models/post";
 import User from "@/app/models/user";
 import { connectToDB } from "@/app/utils/database";
@@ -20,21 +21,48 @@ export const addPost = async (post:PostProps,path?:string) => {
         await connectToDB();
 
         const newPost = await Post.create(post);
-        const saveMentionInUser = post.mentions?.map(async (userId)=> {
+        post.mentions?.map(async (userId)=> {
             const user = await User.findById(userId,{
-                "mentions":1
+                "mentions":1,
+                "activities":1,
+                "unseenCount":1
+            })
+            const activity = await Activity.create({
+                performer:post.author,
+                receiver:user._id,
+                activity:'mentioned',
+                post:newPost._id
             })
 
+            user.unseenCount = user.unseenCount + 1
             user.mentions.push(newPost._id)
-
+            user.activities.push(activity)
+            
             return user.save()
         })
 
-        if(saveMentionInUser) Promise.all(saveMentionInUser)
+
         if(post.parent) {
             const parentPost = await Post.findById(post.parent);
             parentPost.repliesCount = parentPost.repliesCount + 1;
             await parentPost.save();
+
+            // new activity as its a comment
+            const activity = await Activity.create({
+                performer:post.author,
+                receiver:parentPost.author,
+                activity:'commented',
+                post:post.parent
+            })
+
+            const author = await User.findById(parentPost.author,{
+                "unseenCount":1,
+                "activities":1
+            })
+            author.unseenCount = author.unseenCount + 1
+            author.activities.push(activity)
+            await author.save()
+            await parentPost.save()
         }
 
         revalidatePath(path as string);
@@ -80,8 +108,14 @@ export const getAllPost = async (userId?:string,postType?:string) => {
 export const updatePostLikes = async(postId:string,userId:string,liked:boolean,path:string="") => {
     try {
 
-        const post = await Post.findById(postId);
-        const user = await User.findById(userId);
+        const post = await Post.findById(postId,{
+            "likesCount":1,
+            "likedIds":1,
+            "author":1
+        });
+        const user = await User.findById(userId,{
+            "likedPosts":1
+        });
 
         if(!post) throw new Error('post not found!');
 
@@ -97,6 +131,24 @@ export const updatePostLikes = async(postId:string,userId:string,liked:boolean,p
             post?.likedIds.push(userId);
             post.likesCount = post.likesCount + 1;
             user?.likedPosts.push(postId);
+
+            //liking: adding an activity
+            const activity = await Activity.create({
+                performer:user._id,
+                receiver:post.author,
+                activity:'liked',
+                post:postId
+            })
+
+            //adding activity in post's author
+            const author = await User.findById(post.author,{
+                "activities":1,
+                "unseenCount":1
+            })
+
+            author.activities.push(activity)
+            author.unseenCount = author.unseenCount + 1
+            await author.save()
         }
 
         await post.save();
