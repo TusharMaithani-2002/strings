@@ -4,7 +4,7 @@ import LoadingSpinner from "../LoadingSpinner";
 
 interface Props {
   children: React.ReactNode;
-  clickAction?: any
+  clickAction?:  (() => Promise<void>) | (() => void)
   className?: string;
   type?:"submit"|"reset"|"button"|undefined;
 }
@@ -19,10 +19,15 @@ const Button = ({ children, clickAction, className,type }: Props) => {
     <button className={className} onClick={async(event)=>{
       setLoading(true);
 
-      if(typeof clickAction === 'function')
-      await clickAction()
-      setLoading(false);
-    }} type={type}>
+      try {
+        if(typeof clickAction === 'function') await clickAction()
+        setLoading(false);
+      } catch(error:any) {
+        console.log(error)
+        setLoading(false)
+      }
+    }} 
+    type={type}>
 
       <span className="flex items-center justify-around w-full">{loading ? <LoadingSpinner />:""} {children}</span>
      

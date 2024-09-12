@@ -6,11 +6,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useAppContext } from "@/app/context/context";
 import { useRouter } from "next/navigation";
-import Button from "../ui/Button";
 import LoadingSpinner from "../LoadingSpinner";
 import CarouselImageViewer from "../CarouselImageViewer";
 import { FaRegImages } from "react-icons/fa";
 import CustomMultiSelect from "../CustomMultiSelect";
+import HandleSubmit from "@/app/(root)/create/components/HandleSubmit";
 
 const CreatePost = () => {
   const [content, setContent] = useState("");
@@ -23,23 +23,7 @@ const CreatePost = () => {
   // @ts-ignore
   const { user } = useAppContext();
   const router = useRouter();
-
-  const handleSubmit = async () => {
-    if (!user) return;
-    if (images?.length === 0 && content?.length === 0) return;
-    let mentionedUser: any[] = mentions?.map((mention) => mention._id);
-    const data = {
-      content,
-      images: images,
-      mentions:mentionedUser,
-      tags,
-      group: group?.value,
-      author: user._id,
-    };
-    const postData = await addPost(data, "/create");
-    if (postData.success) router.push("/home");
-    return postData;
-  };
+  const reRoute = () => router.push("/home")
 
   // const convertFileToDataUrl = async (file: any) => {
   //   return new Promise((resolve, reject) => {
@@ -214,24 +198,15 @@ const CreatePost = () => {
         </div>
       </div>
 
-      {/* <button
-        type="submit"
-        className="bg-green-500 text-white p-2 px-4 rounded-md mt-3
-        hover:bg-green-700
-        "
-      >
-        submit
-      </button> */}
-
-      <Button
-        type="button"
-        className="bg-[#E90064]  text-white p-2 px-4 rounded-md mt-3
-        hover:bg-[#E90061] 
-        "
-        clickAction={() => handleSubmit()}
-      >
-        submit
-      </Button>
+       <HandleSubmit 
+       content={content}
+       images={images}
+       mentions={mentions}
+       tags={tags}
+       group={group}
+       author={user._id}
+       reRoute={reRoute}
+     />   
     </form>
   );
 };

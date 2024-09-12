@@ -5,7 +5,7 @@ interface Props {
     params : {}
 }
 
-export const GET = async (request:NextRequest,params:Props) => {
+export const GET = async (request:Request,params:Props) => {
     
     try {
 

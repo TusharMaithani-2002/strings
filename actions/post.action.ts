@@ -16,61 +16,82 @@ interface PostProps {
     author: string;
     parent?:string;
 }
-export const addPost = async (post:PostProps,path?:string) => {
+export const addPost = async (post: PostProps, path?: string) => {
     try {
-        await connectToDB();
-
-        const newPost = await Post.create(post);
-        post.mentions?.map(async (userId)=> {
-            const user = await User.findById(userId,{
-                "mentions":1,
-                "activities":1,
-                "unseenCount":1
-            })
+      await connectToDB();
+        
+      console.log('creating post',post)
+      const newPost = await Post.create(post);
+      console.log('new post created',newPost)
+      // Handle mentions asynchronously using Promise.all
+      if (post.mentions && post.mentions.length > 0) {
+        console.log('handling new post')
+        await Promise.all(
+          post.mentions.map(async (userId: string) => {
+            const user = await User.findById(userId, {
+              "mentions": 1,
+              "activities": 1,
+              "unseenCount": 1,
+            });
+  
+            if (!user) throw new Error(`User with ID ${userId} not found`);
+  
             const activity = await Activity.create({
-                performer:post.author,
-                receiver:user._id,
-                activity:'mentioned',
-                post:newPost._id
-            })
+              performer: post.author,
+              receiver: user._id,
+              activity: 'mentioned',
+              post: newPost._id,
+            });
+  
+            user.unseenCount += 1;
+            user.mentions.push(newPost._id);
+            user.activities.push(activity);
+  
+            await user.save();
+            console.log('user updated and saved',user._id)
+          })
+        );
+      }
+  
+      // Handle parent post updates
+      if (post.parent) {
+        console.log('handling parent post')
+        const parentPost = await Post.findById(post.parent);
+        parentPost.repliesCount += 1;
+  
+        // Create activity for commenting on the parent post
+        const activity = await Activity.create({
+          performer: post.author,
+          receiver: parentPost.author,
+          activity: 'commented',
+          post: post.parent,
+        });
 
-            user.unseenCount = user.unseenCount + 1
-            user.mentions.push(newPost._id)
-            user.activities.push(activity)
-            
-            return user.save()
-        })
-
-
-        if(post.parent) {
-            const parentPost = await Post.findById(post.parent);
-            parentPost.repliesCount = parentPost.repliesCount + 1;
-            await parentPost.save();
-
-            // new activity as its a comment
-            const activity = await Activity.create({
-                performer:post.author,
-                receiver:parentPost.author,
-                activity:'commented',
-                post:post.parent
-            })
-
-            const author = await User.findById(parentPost.author,{
-                "unseenCount":1,
-                "activities":1
-            })
-            author.unseenCount = author.unseenCount + 1
-            author.activities.push(activity)
-            await author.save()
-            await parentPost.save()
-        }
-
-        revalidatePath(path as string);
-        return newPost;
-    } catch(error:any) {
-        throw new Error("Error while creating post! message: "+error.message)
+        console.log('created parent post activity', activity)
+  
+        const author = await User.findById(parentPost.author, {
+          unseenCount: 1,
+          activities: 1,
+        });
+  
+        author.unseenCount += 1;
+        author.activities.push(activity);
+  
+        await Promise.all([author.save(), parentPost.save()]);
+        console.log('parent post and author updated and saved')
+      }
+  
+      // Ensure revalidation is only called when necessary
+      if (path) revalidatePath(path);
+    console.log(path)
+      console.log('post creating successful', newPost)
+  
+      return newPost;
+    } catch (error: any) {
+      throw new Error('Error while creating post! message: ' + error.message);
     }
-}
+  };
+  
 
 export const getAllPost = async (userId?:string,postType?:string) => {
     try {
