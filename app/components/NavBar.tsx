@@ -20,10 +20,12 @@ const NavItem = ({value,isActive,showLabel}:NavItemProps) => {
         <Link href={link} className={`flex justify-around items-center p-2
         md:h-[50px] hover:bg-[#E90064] md:text-lg ${showLabel ? 'w-[200px]':'w-[60px]'}
         transition-all duration-200 ease-in-out text-white hover:text-white ${isActive ? 'text-white bg-[#E90064] text-xl' : ''}
-        rounded-md
+        rounded-md relative
         `}>
             {
-              label === 'Activities' && activityCount > 0 ? <span className='rounded-full bg-[#E90064] h-[15px] w-[15px] text-white text-xs text-center z-50'>{activityCount}</span> : <></>
+              label === 'Activities' && activityCount > 0 ? <span className='rounded-full bg-[#E90064] h-[15px] w-[15px]
+               text-white text-xs text-center z-50 absolute top-[8px] left-[10px]'>
+                {activityCount}</span> : <></>
             }
             <Icon className='h-[25px] w-[25px] z-0' />
             <div className={showLabel?'md:block hidden':'hidden'}>{label}</div>
