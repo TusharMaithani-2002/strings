@@ -49,13 +49,20 @@ const ActivityNofitication = ({activityInfo}:{activityInfo:ActivityInfo}) => {
 
     const handlePerformerClick = (e:any) => {
         e.stopPropagation()
+        router.push(`/profile/${performer._id}`)
+    }
+
+    const handleActivityClick = () => {
         router.push(linkHref)
     }
 
-    return <div className="">
-        <span onClick={e=>handlePerformerClick(e)} className="font-semibold hover:text-[#E90064]">{performer.username}</span> {message}
+    return <div className=""
+    onClick={(e)=>handleActivityClick()}
+    >
+        <span onClick={e=>handlePerformerClick(e)} className="font-semibold hover:text-[#E90064]">
+            {performer.username}
+        </span> {message}
     </div>
-    
 }
 
 const Page = () => {
@@ -70,14 +77,11 @@ const Page = () => {
     //@ts-ignore
     const userId = session?.user?.id
     useEffect(() => {
-
-
         const fetchActivity = async () => {
             setLoading(true)
             const fetchedActivities = await axios.get(`api/clientrequest/activities/${userId}`)
             await axios.patch(`/api/clientrequest/activities/activityCount/seen/${userId}`)
             setActivities(fetchedActivities.data)
-            console.log(fetchedActivities.data)
             setActivityCount(0)
             setLoading(false)
         }
@@ -85,18 +89,14 @@ const Page = () => {
         fetchActivity()
     },[userId,setActivityCount,activityCount])
 
-    const handleActivityClick = (
-        post:string
-    ) => {
-        router.push(`post/${post}`)
-    }
+   
     return (
         <div className="w-full flex flex-col overflow-y-auto h-full gap-2 py-8 px-2">
              {loading ? <LoadingModal show={loading}/> : 
             (
                Array.isArray(activities) && activities.map((activity:ActivityInfo,key) => (
                 <div className="text-white w-full p-2 md:w-2/5 bg-black cursor-pointer rounded-sm" key={key}
-                onClick={(e)=>handleActivityClick(activity.post)}
+                
                 >
                    <ActivityNofitication activityInfo={activity}/>
                 </div>
